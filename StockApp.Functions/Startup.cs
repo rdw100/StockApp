@@ -2,8 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StockApp.Shared;
-using System;
-using System.Net.Http;
 
 [assembly: FunctionsStartup(typeof(StockApp.Functions.Startup))]
 
