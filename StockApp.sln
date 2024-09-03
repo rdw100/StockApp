@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Client", "StockApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Functions", "StockApp.Functions\StockApp.Functions.csproj", "{85B3A765-5015-40EA-A27F-DD45E735F84C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApp.Shared", "StockApp.Shared\StockApp.Shared.csproj", "{8803F210-372A-42F2-9B98-0D3277653B1C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Shared", "StockApp.Shared\StockApp.Shared.csproj", "{8803F210-372A-42F2-9B98-0D3277653B1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

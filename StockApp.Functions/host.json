@@ -1,20 +1,20 @@
 {
   "version": "2.0",
-  "extensions": {
-    "http": {
-      "routePrefix": "",
-      "maxOutstandingRequests": 200,
-      "maxConcurrentRequests": 100,
-      "dynamicThrottlesEnabled": false
-    }
-  },
-  "http": {
-    "cors": {
-      "allowedOrigins": [
-        "*"
-      ]
-    }
-  },
+  //"extensions": {
+  //  "http": {
+  //    "routePrefix": "",
+  //    "maxOutstandingRequests": 200,
+  //    "maxConcurrentRequests": 100,
+  //    "dynamicThrottlesEnabled": false
+  //  }
+  //},
+  //"http": {
+  //  "cors": {
+  //    "allowedOrigins": [
+  //      "*"
+  //    ]
+  //  }
+  //},
   "logging": {
     "applicationInsights": {
       "samplingSettings": {

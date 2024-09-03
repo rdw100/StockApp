@@ -23,12 +23,4 @@
         var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
         stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
     }
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //             // var result = await StockService.GetStockPriceAsync("AAPL");
-    //     var stockData = await Http.GetFromJsonAsync<ChartResult>("/api/GetStockPrice?symbol=AAPL") ?? new ChartResult { };
-    //     stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-        
-    // }
 }
