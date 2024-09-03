@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "StockApp.Functions": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7010",
+      "launchBrowser": false
+    }
+  }
+}
