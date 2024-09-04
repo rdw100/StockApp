@@ -1,13 +1,10 @@
-using System;
-using System.Net.Http;
-using System.Net.Http.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using StockApp.Shared;
+using System.Net.Http.Json;
 
 public static class GetStockPrice
 {
@@ -27,7 +24,6 @@ public static class GetStockPrice
             response.EnsureSuccessStatusCode();
             var result = await response.Content.ReadFromJsonAsync<ChartResult>();
             return new OkObjectResult(result);
-            //return new OkObjectResult(response);
         }
         catch (Exception ex)
         {

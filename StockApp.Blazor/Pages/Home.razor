@@ -22,30 +22,5 @@
     {
         var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
         stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-
-        // // var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
-        // // stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-        // try
-        // {
-        //     // Make an HTTP request to your Azure Function
-        //     using var httpClient = new HttpClient();
-        //     var response = await httpClient.GetAsync($"/api/GetStockPrice?symbol={Symbol}"); // Adjust the URL as needed
-
-        //     if (response.IsSuccessStatusCode)
-        //     {
-        //         var result = await response.Content.ReadFromJsonAsync<ChartResult>();
-        //         stockData = await response.Content.ReadAsStringAsync();
-        //         stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-        //     }
-        //     else
-        //     {
-        //         stockData = "Error fetching stock data.";
-        //     }
-        // }
-        // catch (Exception ex)
-        // {
-        //     stockData = $"Error: {ex.Message}";
-        // }
-
     }
 }
