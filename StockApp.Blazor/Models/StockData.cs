@@ -1,4 +1,4 @@
-﻿namespace StockApp.Shared
+﻿namespace StockApp.Models
 {
     using System.Collections.Generic;
     using System.Text.Json.Serialization;

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
-using StockApp.Shared;
+using StockApp.Models;
 using System.Net.Http.Json;
 
 public static class GetStockPrice
