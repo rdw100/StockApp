@@ -11,20 +11,19 @@
 //    {
 //        public override void Configure(IFunctionsHostBuilder builder)
 //        {
-//            //var configuration = new ConfigurationBuilder()
-//            //    .SetBasePath(Environment.CurrentDirectory)
-//            //    .AddJsonFile("local.settings.json" ?? "host.json", optional: false, reloadOnChange: true)
-//            //    .AddEnvironmentVariables()
-//            //    .Build();
+//            var configuration = new ConfigurationBuilder()
+//                .SetBasePath(Environment.CurrentDirectory)
+//                .AddJsonFile("local.settings.json" ?? "host.json", optional: false, reloadOnChange: true)
+//                .AddEnvironmentVariables()
+//                .Build();
 
-//            //builder.Services.AddSingleton<IConfiguration>(configuration);
+//            builder.Services.AddSingleton<IConfiguration>(configuration);
 //            builder.Services.AddHttpClient();
 //            builder.Services.AddSingleton<IStockService, MarketStockService>(sp =>
 //            {
-//                //var config = sp.GetRequiredService<IConfiguration>();
+//                var config = sp.GetRequiredService<IConfiguration>();
 //                var httpClient = sp.GetRequiredService<IHttpClientFactory>().CreateClient();
-//                //return new MarketStockService(httpClient, config);
-//                return new MarketStockService(httpClient);
+//                return new MarketStockService(httpClient, config);
 //            });
 //        }
 //    }

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using StockApp.Shared
 @using static System.Net.WebRequestMethods
-@inject IStockService StockService
+
 @inject HttpClient Http
 
 <h3>Stock Price</h3>
@@ -9,18 +9,43 @@
 <input @bind="Symbol" placeholder="Enter stock symbol" />
 <button @onclick="GetStockPrice">Get Price</button>
 
-<p>Service: @StockService.ServiceName</p>
+@* <p>Service: @StockService.ServiceName</p> *@
 <p>Symbol: @Symbol</p>
 <p>Price: @stockPrice</p>
 
 @code {
     private string Symbol;
     private string stockPrice;
+    private ChartResult stockData;
 
     private async Task GetStockPrice()
     {
-        // var result = await StockService.GetStockPriceAsync("AAPL");
         var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
         stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
+
+        // // var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
+        // // stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
+        // try
+        // {
+        //     // Make an HTTP request to your Azure Function
+        //     using var httpClient = new HttpClient();
+        //     var response = await httpClient.GetAsync($"/api/GetStockPrice?symbol={Symbol}"); // Adjust the URL as needed
+
+        //     if (response.IsSuccessStatusCode)
+        //     {
+        //         var result = await response.Content.ReadFromJsonAsync<ChartResult>();
+        //         stockData = await response.Content.ReadAsStringAsync();
+        //         stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
+        //     }
+        //     else
+        //     {
+        //         stockData = "Error fetching stock data.";
+        //     }
+        // }
+        // catch (Exception ex)
+        // {
+        //     stockData = $"Error: {ex.Message}";
+        // }
+
     }
 }

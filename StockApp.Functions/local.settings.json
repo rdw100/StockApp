@@ -1,10 +1,13 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
-    "FUNCTIONS_INPROC_NET8_ENABLED": "1",
+    //"AzureWebJobsStorage": "",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "MarketApiRootUrl": "https://query1.finance.yahoo.com/v8/finance/chart/"
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_INPROC_NET8_ENABLED": "1"
+    //"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+    //"AzureWebJobsStorage": "",
+    //"FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
   },
   "Host": {
     "CORSCredentials": false,
