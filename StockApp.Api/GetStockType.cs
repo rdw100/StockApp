@@ -30,6 +30,9 @@ namespace StockApp.Api
                 Data = sampleData
             };
 
+            // Simulate an asynchronous operation
+            await Task.Delay(10);
+
             return new OkObjectResult(chartResult);
         }
     }
