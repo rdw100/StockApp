@@ -2,7 +2,7 @@
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": [ "/_framework/*", "/css/*" ]
-  //},
+  }//,
   //"platform": {
   //  "apiRuntime": "dotnet-isolated:7.0"
   //}
