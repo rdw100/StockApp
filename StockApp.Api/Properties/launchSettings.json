@@ -2,7 +2,8 @@
   "profiles": {
     "StockApp.Api": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7263",
+      "commandLineArgs": "start --cors *",
+      //"commandLineArgs": "--port 7263",
       "launchBrowser": false
     }
   }
