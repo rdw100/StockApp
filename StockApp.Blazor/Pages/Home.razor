@@ -8,9 +8,18 @@
 <input @bind="Symbol" placeholder="Enter stock symbol" />
 <button @onclick="GetStockPrice">Get Price</button>
 
-@* <p>Service: @StockService.ServiceName</p> *@
-<p>Symbol: @Symbol</p>
-<p>Price: @stockPrice</p>
+@if (stockData != null)
+{
+    @* <p>Service: @StockService.ServiceName</p> *@
+    @* <p>Symbol: @Symbol</p> *@
+    @* <p>Price: @stockPrice</p> *@
+    @* <p>Data: @stockData.Symbol @stockData.Data</p> *@
+
+    <div>
+        <h4>@stockData.Symbol</h4>
+        <pre>@stockData.Data</pre>
+    </div>
+}
 
 @code {
     private string Symbol;
@@ -19,7 +28,9 @@
 
     private async Task GetStockPrice()
     {
-        var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
-        stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
+        var response = await Http.GetFromJsonAsync<ChartResult>($"api/stock?symbol={Symbol}");
+        // ?? new ChartResult { };
+        //stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
+        stockData = response;
     }
 }
