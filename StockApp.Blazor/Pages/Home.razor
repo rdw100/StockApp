@@ -28,7 +28,7 @@
 
     private async Task GetStockPrice()
     {
-        stockData = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
+        stockData = await Http.GetFromJsonAsync<ChartResult>($"api/stocktype?symbol={stockSymbol}");
         //var response = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
         // ?? new ChartResult { };
         //stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
