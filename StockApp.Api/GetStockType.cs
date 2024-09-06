@@ -29,12 +29,12 @@ namespace StockApp.Api
                 Symbol = symbol,
                 Interval = "1d",
                 Range = "1mo",
-                Data = new
+                Data = new Data
                 {
-                    Open = new[] { 300.0, 305.0, 310.0 },
-                    Close = new[] { 305.0, 310.0, 315.0 },
-                    High = new[] { 310.0, 315.0, 320.0 },
-                    Low = new[] { 295.0, 300.0, 305.0 }
+                    Open = new List<long> { 100, 105, 110, 115, 120 },
+                    Close = new List<long> { 110, 115, 120, 125, 130 },
+                    High = new List<long> { 115, 120, 125, 130, 135 },
+                    Low = new List<long> { 95, 100, 105, 110, 115 }
                 }
             };
 

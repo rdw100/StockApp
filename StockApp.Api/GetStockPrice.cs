@@ -39,8 +39,7 @@ public static class GetStockPrice
         {
             Symbol = symbol,
             Interval = "1d",
-            Range = "5d",
-            Data = json
+            Range = "5d"
         };
 
         return new OkObjectResult(chartResult);

@@ -17,7 +17,12 @@
 
     <div>
         <h4>@stockData.Symbol</h4>
-        <pre>@stockData.Data</pre>
+        <ul>
+            <li>Open: @string.Join(", ", stockData.Data.Open)</li>
+            <li>Close: @string.Join(", ", stockData.Data.Close)</li>
+            <li>High: @string.Join(", ", stockData.Data.High)</li>
+            <li>Low: @string.Join(", ", stockData.Data.Low)</li>
+        </ul>
     </div>
 }
 
