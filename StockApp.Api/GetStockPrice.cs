@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Linq;
 using StockApp.Shared;
@@ -10,7 +9,7 @@ public static class GetStockPrice
 {
     private static readonly HttpClient httpClient = new HttpClient();
 
-    [FunctionName("GetStockPrice")]
+    [Function("GetStockPrice")]
     public static async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stock")] HttpRequest req,
         ILogger log)

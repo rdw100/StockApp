@@ -5,7 +5,7 @@
 
 <h3>Stock Price</h3>
 
-<input @bind="Symbol" placeholder="Enter stock symbol" />
+<input @bind="stockSymbol" placeholder="Enter stock symbol" />
 <button @onclick="GetStockPrice">Get Price</button>
 
 @if (stockData != null)
@@ -22,15 +22,16 @@
 }
 
 @code {
-    private string Symbol;
+    private string stockSymbol;
     private string stockPrice;
     private ChartResult stockData;
 
     private async Task GetStockPrice()
     {
-        var response = await Http.GetFromJsonAsync<ChartResult>($"/api/stocktype?symbol={Symbol}");
+        stockData = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
+        //var response = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
         // ?? new ChartResult { };
         //stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-        stockData = response;
+        //stockData = response;
     }
 }
