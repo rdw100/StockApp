@@ -29,11 +29,14 @@
 @code {
     private string stockSymbol;
     private string stockPrice;
-    private ChartResult stockData;
+    private StockResult stockData;
 
     private async Task GetStockPrice()
     {
-        stockData = await Http.GetFromJsonAsync<ChartResult>($"api/stocktype?symbol={stockSymbol}");
+        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stocktype?symbol={stockSymbol}");
+
+        stockData = await Http.GetFromJsonAsync<StockResult>($"api/stockprice/{stockSymbol}");
+
         //var response = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
         // ?? new ChartResult { };
         //stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
