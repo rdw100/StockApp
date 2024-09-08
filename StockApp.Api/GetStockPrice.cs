@@ -1,5 +1,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StockApp.Shared;
 using System.Net.Http.Json;
@@ -18,8 +20,9 @@ public class GetStockPrice
 
         string interval = req.Query["interval"];
         string range = req.Query["range"];
-
-        string apiUrl = $"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval={interval}&range={range}";
+        var configuration = executionContext.InstanceServices.GetService<IConfiguration>();
+        string baseUrl = configuration["BaseUrl"];
+        string apiUrl = $"{baseUrl}{symbol}?interval={interval}&range={range}";
 
         try
         {
