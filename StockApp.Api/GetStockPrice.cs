@@ -11,12 +11,15 @@ public class GetStockPrice
     private static HttpClient _httpClient = new HttpClient();
 
     [Function("GetStockPrice")]
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequestData req, FunctionContext executionContext)
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stockprice/{symbol}")] HttpRequestData req, string symbol, FunctionContext executionContext)
     {
         var logger = executionContext.GetLogger("GetStockPrice");
         logger.LogInformation("C# HTTP trigger function processed a request.");
 
-        string apiUrl = "https://query1.finance.yahoo.com/v8/finance/chart/AAPL?interval=1d&range=5d";
+        string interval = req.Query["interval"];
+        string range = req.Query["range"];
+
+        string apiUrl = $"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?interval={interval}&range={range}";
 
         try
         {
@@ -36,6 +39,7 @@ public class GetStockPrice
             return errorResponse;
         }
     }
+
     //private static readonly HttpClient httpClient = new HttpClient();
 
     //[Function("GetStockPrice")]
