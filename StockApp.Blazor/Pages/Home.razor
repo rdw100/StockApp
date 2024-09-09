@@ -11,11 +11,11 @@
 @if (stockData != null)
 {
     @* <p>Service: @StockService.ServiceName</p> *@
-    @* <p>Symbol: @Symbol</p> *@
+    <p>Symbol: @stockSymbol</p>
     @* <p>Price: @stockPrice</p> *@
-    @* <p>Data: @stockData.Symbol @stockData.Data</p> *@
+    <p>Price: @stockData.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice </p>
 
-    <div>
+@*     <div>
         <h4>@stockData.Symbol</h4>
         <ul>
             <li>Open: @string.Join(", ", stockData.Data.Open)</li>
@@ -23,19 +23,43 @@
             <li>High: @string.Join(", ", stockData.Data.High)</li>
             <li>Low: @string.Join(", ", stockData.Data.Low)</li>
         </ul>
-    </div>
+    </div> *@
 }
 
 @code {
     private string stockSymbol;
-    private string stockPrice;
-    private StockResult stockData;
+    private double stockPrice;
+    private string interval = "1d";
+    private string range = "5d";
+    private ChartResult stockData;
 
     private async Task GetStockPrice()
     {
-        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stocktype?symbol={stockSymbol}");
+        var url = $"api/stockprice/{stockSymbol}?interval={interval}&range={range}";
 
-        stockData = await Http.GetFromJsonAsync<StockResult>($"api/stockprice/{stockSymbol}");
+        // var response = await Http.GetAsync(url);
+
+        // if (response.IsSuccessStatusCode)
+        // {
+        //     stockData = await response.Content.ReadFromJsonAsync<ChartResult>();
+        // }
+
+        // string rawJson = await Http.GetStringAsync(url);
+        // Console.WriteLine(rawJson);
+
+        var result = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(url);
+        stockData = result.Value;
+
+        
+        // HttpResponseMessage response = await Http.GetAsync(url);
+        // var data = await response.Content.ReadFromJsonAsync<ChartResult>();
+
+        //ChartResult response = await Http.GetAsync<ChartResult>(url);
+        
+        //stockData = await response.Content.ReadFromJsonAsync<ChartResult>();
+
+        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stocktype?symbol={stockSymbol}");
+        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stockprice/{stockSymbol}?interval={interval}&range={range}");
 
         //var response = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
         // ?? new ChartResult { };

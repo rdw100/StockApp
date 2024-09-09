@@ -3,7 +3,7 @@
 namespace StockApp.Shared
 {
 
-    public class ChartResult
+    public partial class ChartResult
     {
         [JsonPropertyName("chart")]
         public Chart Chart { get; set; }
