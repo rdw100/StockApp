@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using StockApp.Shared
+@using System.Text.Json
 
 @inject HttpClient Http
 
@@ -8,22 +9,32 @@
 <input @bind="stockSymbol" placeholder="Enter stock symbol" />
 <button @onclick="GetStockPrice">Get Price</button>
 
-@if (stockData != null)
+@if (isLoading)
 {
-    @* <p>Service: @StockService.ServiceName</p> *@
-    <p>Symbol: @stockSymbol</p>
-    @* <p>Price: @stockPrice</p> *@
-    <p>Price: @stockData.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice </p>
-
-@*     <div>
-        <h4>@stockData.Symbol</h4>
+    <p>Loading stock data...</p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+else if (chartResult != null)
+{
+    <div>
+        <h3>Symbol: @chartResult.Chart.Result.FirstOrDefault().Meta.Symbol</h3>
+        <h3>Price: @chartResult.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice </h3>
         <ul>
-            <li>Open: @string.Join(", ", stockData.Data.Open)</li>
-            <li>Close: @string.Join(", ", stockData.Data.Close)</li>
-            <li>High: @string.Join(", ", stockData.Data.High)</li>
-            <li>Low: @string.Join(", ", stockData.Data.Low)</li>
+            <li>Open: @string.Join(", ", @chartResult.Chart.Result.FirstOrDefault().Indicators.Quote.FirstOrDefault().Open)</li>
+            <li>Close: @string.Join(", ", @chartResult.Chart.Result.FirstOrDefault().Indicators.Quote.FirstOrDefault().Close)</li>
+            <li>High: @string.Join(", ", @chartResult.Chart.Result.FirstOrDefault().Indicators.Quote.FirstOrDefault().High)</li>
+            <li>Low: @string.Join(", ", @chartResult.Chart.Result.FirstOrDefault().Indicators.Quote.FirstOrDefault().Low)</li>
         </ul>
-    </div> *@
+    </div>
+
+    <pre>@rawJson</pre> <!-- Displaying raw data; format as needed -->
+}
+else
+{
+    <p>No stock data available.</p>
 }
 
 @code {
@@ -31,39 +42,44 @@
     private double stockPrice;
     private string interval = "1d";
     private string range = "5d";
-    private ChartResult stockData;
+    private ChartResult? chartResult;
+    private bool isLoading = false;
+    private string errorMessage = string.Empty;
+    private string rawJson = string.Empty;
 
     private async Task GetStockPrice()
     {
-        var url = $"api/stockprice/{stockSymbol}?interval={interval}&range={range}";
+        isLoading = true;
+        errorMessage = string.Empty;
 
-        // var response = await Http.GetAsync(url);
+        try
+        {
+            // Call your Azure Function API
+            var apiUrl = $"api/stockprice/{stockSymbol}?interval={interval}&range={range}";
 
-        // if (response.IsSuccessStatusCode)
-        // {
-        //     stockData = await response.Content.ReadFromJsonAsync<ChartResult>();
-        // }
+            // Deserialize the response into ApiResponseWrapper<ChartResult>
+            var response = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(apiUrl);
 
-        // string rawJson = await Http.GetStringAsync(url);
-        // Console.WriteLine(rawJson);
-
-        var result = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(url);
-        stockData = result.Value;
-
-        
-        // HttpResponseMessage response = await Http.GetAsync(url);
-        // var data = await response.Content.ReadFromJsonAsync<ChartResult>();
-
-        //ChartResult response = await Http.GetAsync<ChartResult>(url);
-        
-        //stockData = await response.Content.ReadFromJsonAsync<ChartResult>();
-
-        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stocktype?symbol={stockSymbol}");
-        //stockData = await Http.GetFromJsonAsync<StockResult>($"api/stockprice/{stockSymbol}?interval={interval}&range={range}");
-
-        //var response = await Http.GetFromJsonAsync<ChartResult>($"stocktype?symbol={stockSymbol}");
-        // ?? new ChartResult { };
-        //stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-        //stockData = response;
+            if (response?.Value == null)
+            {
+                errorMessage = "No data received from the server.";
+            }
+            else
+            {
+                // Extract the actual ChartResult from the wrapper
+                chartResult = response.Value; 
+                
+                // Serialize the chartResult object back to JSON
+                rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load stock data: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 }
