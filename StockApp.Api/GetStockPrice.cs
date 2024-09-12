@@ -26,7 +26,7 @@ public class GetStockPrice
         string interval = req.Query["interval"] ?? "1d";
         string range = req.Query["range"] ?? "5d";
         var configuration = executionContext.InstanceServices.GetService<IConfiguration>();
-        string baseUrl = configuration["BaseUrl"];
+        string baseUrl = configuration["ChartService:BaseUrl"];
         string apiUrl = $"{baseUrl}{symbol}?interval={interval}&range={range}";
 
         if (string.IsNullOrEmpty(symbol))
