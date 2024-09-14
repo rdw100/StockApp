@@ -60,25 +60,25 @@ else
             // Call your Azure Function API
             var apiUrl = $"api/stockprice/{stockSymbol}?interval={interval}&range={range}";
 
-            // Deserialize the response into ApiResponseWrapper<ChartResult>
-            var response = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(apiUrl);
+            var response = await Http.GetAsync(apiUrl);
+            rawJson = await response.Content.ReadAsStringAsync();
 
-            if (response?.Value == null)
+            if (response.IsSuccessStatusCode)
             {
-                errorMessage = "No data received from the server.";
+                chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+            {
+                errorMessage = "Chart data not found";
             }
             else
             {
-                // Extract the actual ChartResult from the wrapper
-                chartResult = response.Value;
-
-                // Serialize the chartResult object back to JSON
-                rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });
+                errorMessage = "An error occurred";
             }
         }
         catch (Exception ex)
         {
-            errorMessage = $"Failed to load stock data: {ex.Message}";
+            errorMessage = $"Failed to load chart data: {ex.Message}";
         }
         finally
         {
