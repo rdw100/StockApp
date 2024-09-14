@@ -23,15 +23,15 @@ public class GetStockPrice
     [Function("GetStockPrice")]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
-        Route = "stockprice/{symbol}")] HttpRequest req, 
+        Route = "stockprice/{symbol}")] HttpRequestData req, 
         string symbol, 
         FunctionContext executionContext)
     {
         var log = executionContext.GetLogger("GetStockPrice");
         log.LogInformation("C# HTTP trigger function processed a request.");
 
-        string interval = req.Query["interval"].ToString() ?? "1d";
-        string range = req.Query["range"].ToString() ?? "5d";
+        string interval = req.Query["interval"] ?? "1d";
+        string range = req.Query["range"] ?? "5d";
         var configuration = executionContext.InstanceServices.GetService<IConfiguration>();
         string baseUrl = configuration["ChartService:BaseUrl"];
         string apiUrl = $"{baseUrl}{symbol}?interval={interval}&range={range}";
