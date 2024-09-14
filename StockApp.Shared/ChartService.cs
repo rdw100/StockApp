@@ -17,8 +17,6 @@ namespace StockApp.Shared
         {
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
             var url = $"{baseUrl}{symbol}?interval={interval}&range={range}";
-            //var chartResult = await httpClient.GetFromJsonAsync<ChartResult>(url);
-
             var response = await httpClient.GetAsync(url);
             response.EnsureSuccessStatusCode();
             var chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -11,10 +12,16 @@ namespace StockApp.Api;
 
 public class GetStockPrice
 {
-    private static readonly HttpClient httpClient = new HttpClient();
+
+    private readonly IChartService chartService;
+
+    public GetStockPrice(IChartService iChartService)
+    {
+        chartService = iChartService;
+    }
 
     [Function("GetStockPrice")]
-    public static async Task<IActionResult> Run(
+    public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
         Route = "stockprice/{symbol}")] HttpRequestData req, 
         string symbol, 
@@ -36,10 +43,8 @@ public class GetStockPrice
 
         try
         {
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
-            //var chartResult = await httpClient.GetFromJsonAsync<ChartResult>(apiUrl);
-            HttpResponseMessage response = await httpClient.GetAsync(apiUrl);
-            var chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
+            var chartResult = await chartService.GetStockPriceAsync(symbol, interval, range);
+
             if (chartResult == null)
             {
                 return new NotFoundResult();
