@@ -33,6 +33,11 @@ else if (chartResult != null)
         </ul>
     </div>
 
+    @if (!string.IsNullOrEmpty(statusMessage))
+    {
+        <p>Status: @statusMessage</p>
+    }
+
     <pre>@rawJson</pre> <!-- Displaying raw data; format as needed -->
 }
 else
@@ -49,6 +54,7 @@ else
     private bool isLoading = false;
     private string errorMessage = string.Empty;
     private string rawJson = string.Empty;
+    private string statusMessage;
 
     private async Task GetStockPrice()
     {
@@ -65,11 +71,7 @@ else
             // var response = await Http.GetFromJsonAsync<ChartResult>(apiUrl);
             // chartResult = response;
 
-            // var response = await Http.GetAsync(apiUrl);
-            // if (response.IsSuccessStatusCode)
-            // {
-            //     chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
-            // }
+
 
             // Deserialize the response into ApiResponseWrapper<ChartResult>
             // var response = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(apiUrl);
@@ -85,7 +87,14 @@ else
             //     // Serialize the chartResult object back to JSON
             //     rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });
             // }
-            var response = await Http.GetFromJsonAsync<ChartResult>(apiUrl);
+            
+            //var response = await Http.GetFromJsonAsync<ChartResult>(apiUrl);
+
+            var response = await Http.GetAsync(apiUrl);
+            // if (response.IsSuccessStatusCode)
+            // {
+            //     chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
+            // }
 
             if (response == null)
             {
@@ -94,8 +103,9 @@ else
             else
             {
                 // Extract the actual ChartResult from the wrapper
-                chartResult = response;
-
+                chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
+                //chartResult = response;
+                statusMessage = $"Status Code: {(int)response.StatusCode}";
                 // Serialize the chartResult object back to JSON
                 rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });
             }
