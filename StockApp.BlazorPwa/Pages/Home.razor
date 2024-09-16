@@ -60,17 +60,41 @@ else
             // Call your Azure Function API
             var apiUrl = $"api/stockprice/{stockSymbol}?interval={interval}&range={range}";
 
-            // Deserialize the response into ApiResponseWrapper<ChartResult>
-            var response = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(apiUrl);
+            //var apiUrl = _configuration["ApiUrls:StockApi"];  // Points to Azure Functions or Web API
 
-            if (response?.Value == null)
+            // var response = await Http.GetFromJsonAsync<ChartResult>(apiUrl);
+            // chartResult = response;
+
+            // var response = await Http.GetAsync(apiUrl);
+            // if (response.IsSuccessStatusCode)
+            // {
+            //     chartResult = await response.Content.ReadFromJsonAsync<ChartResult>();
+            // }
+
+            // Deserialize the response into ApiResponseWrapper<ChartResult>
+            // var response = await Http.GetFromJsonAsync<ApiResponseWrapper<ChartResult>>(apiUrl);
+            // if (response?.Value == null)
+            // {
+            //     errorMessage = "No data received from the server.";
+            // }
+            // else
+            // {
+            //     // Extract the actual ChartResult from the wrapper
+            //     chartResult = response.Value;
+
+            //     // Serialize the chartResult object back to JSON
+            //     rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });
+            // }
+            var response = await Http.GetFromJsonAsync<ChartResult>(apiUrl);
+
+            if (response == null)
             {
                 errorMessage = "No data received from the server.";
             }
             else
             {
                 // Extract the actual ChartResult from the wrapper
-                chartResult = response.Value;
+                chartResult = response;
 
                 // Serialize the chartResult object back to JSON
                 rawJson = JsonSerializer.Serialize(chartResult, new JsonSerializerOptions { WriteIndented = true });

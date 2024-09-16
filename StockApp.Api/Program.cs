@@ -5,7 +5,8 @@ using Microsoft.Extensions.Hosting;
 using StockApp.Shared;
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
+    //.ConfigureFunctionsWorkerDefaults()
+    .ConfigureFunctionsWebApplication()
     .ConfigureAppConfiguration((context, config) =>
     {
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
