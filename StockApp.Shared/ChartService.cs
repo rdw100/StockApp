@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
+using StockApp.Shared.Interfaces;
 using System.Net.Http.Json;
 
 namespace StockApp.Shared
@@ -13,7 +14,7 @@ namespace StockApp.Shared
             baseUrl = options.Value.BaseUrl;
         }
 
-        public async Task<ChartResult> GetStockPriceAsync(string symbol, string interval, string range)
+        public async Task<ChartResult> GetChartPriceAsync(string symbol, string interval, string range)
         {
             httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36");
             var url = $"{baseUrl}{symbol}?interval={interval}&range={range}";

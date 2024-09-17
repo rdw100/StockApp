@@ -1,7 +1,7 @@
-﻿namespace StockApp.Shared
+﻿namespace StockApp.Shared.Interfaces
 {
     public interface IChartService
     {
-        Task<ChartResult> GetStockPriceAsync(string symbol, string interval, string range);
+        Task<ChartResult> GetChartPriceAsync(string symbol, string interval, string range);
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using StockApp.Shared;
+using StockApp.Shared.Interfaces;
 
 namespace StockApp.Api;
 
@@ -41,7 +41,7 @@ public class GetStockPrice
 
         try
         {
-            var chartResult = await chartService.GetStockPriceAsync(symbol, interval, range);
+            var chartResult = await chartService.GetChartPriceAsync(symbol, interval, range);
 
             if (chartResult == null)
             {

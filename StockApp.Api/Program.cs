@@ -3,9 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using StockApp.Shared;
+using StockApp.Shared.Interfaces;
 
 var host = new HostBuilder()
-    //.ConfigureFunctionsWorkerDefaults()
     .ConfigureFunctionsWebApplication()
     .ConfigureAppConfiguration((context, config) =>
     {
