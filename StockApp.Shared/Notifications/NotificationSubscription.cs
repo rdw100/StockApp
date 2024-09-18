@@ -1,4 +1,4 @@
-﻿namespace Bronto.Models.Notifications
+﻿namespace StockApp.Shared.Notifications
 {
     public class NotificationSubscription
     {
