@@ -363,3 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 /StockApp.Functions/local.settings.json
 /StockApp.Functions/local.settings.json
+/StockApp.Shared/appsettings.json
+/StockApp.Api/appsettings.json
+/StockApp.Api.Services/appsettings.json
