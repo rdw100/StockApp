@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using StockApp.Shared.Interfaces;
 
@@ -20,8 +18,8 @@ public class GetStockPrice
 
     [Function("GetStockPrice")]
     public async Task<IActionResult> Run(
-        [HttpTrigger(AuthorizationLevel.Anonymous, "get", 
-        Route = "stockprice/{symbol}")] HttpRequestData req, 
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "stockprice/{symbol}")] 
+        HttpRequestData req, 
         string symbol, 
         FunctionContext executionContext)
     {
@@ -30,9 +28,6 @@ public class GetStockPrice
 
         string interval = req.Query["interval"] ?? "1d";
         string range = req.Query["range"] ?? "5d";
-        var configuration = executionContext.InstanceServices.GetService<IConfiguration>();
-        string baseUrl = configuration["ChartService:BaseUrl"];
-        string apiUrl = $"{baseUrl}{symbol}?interval={interval}&range={range}";
 
         if (string.IsNullOrEmpty(symbol))
         {

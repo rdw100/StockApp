@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Api", "StockApp.Ap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Shared", "StockApp.Shared\StockApp.Shared.csproj", "{D681F46B-8272-49C5-9993-E3C196BFB89F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApp.BlazorPwa", "StockApp.BlazorPwa\StockApp.BlazorPwa.csproj", "{32708CF6-1E81-4F70-8AC5-25FE495ABA73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.BlazorPwa", "StockApp.BlazorPwa\StockApp.BlazorPwa.csproj", "{32708CF6-1E81-4F70-8AC5-25FE495ABA73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApp.Api.Services", "StockApp.Api.Services\StockApp.Api.Services.csproj", "{EBDBE969-03B4-4E9B-A981-BDBDB28DE15D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{32708CF6-1E81-4F70-8AC5-25FE495ABA73}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32708CF6-1E81-4F70-8AC5-25FE495ABA73}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32708CF6-1E81-4F70-8AC5-25FE495ABA73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EBDBE969-03B4-4E9B-A981-BDBDB28DE15D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBDBE969-03B4-4E9B-A981-BDBDB28DE15D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBDBE969-03B4-4E9B-A981-BDBDB28DE15D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBDBE969-03B4-4E9B-A981-BDBDB28DE15D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
