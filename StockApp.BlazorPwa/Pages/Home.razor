@@ -11,8 +11,8 @@
 
 <h3>Stock Price</h3>
 
-<input @bind="stockSymbol" placeholder="Enter stock symbol" />
-<button @onclick="GetStockPrice">Get Price</button>
+<input @bind="symbol" placeholder="Enter stock symbol" />
+<button @onclick="GetChartData">Get Price</button>
 
 @if (isLoading)
 {
@@ -58,8 +58,7 @@ else
 }
 
 @code {
-    private string stockSymbol;
-    private double stockPrice;
+    private string symbol;
     private string interval = "1d";
     private string range = "5d";
     private ChartResult? chartResult;
@@ -69,7 +68,7 @@ else
     private string statusMessage;
     private ApiResponse<ChartResult> apiResponse;
 
-    private async Task GetStockPrice()
+    private async Task GetChartData()
     {
         isLoading = true;
         errorMessage = string.Empty;
@@ -77,7 +76,7 @@ else
         try
         {
             // Call API & Extract the actual ChartResult from the wrapper
-            apiResponse = await ChartService.GetChartDataAsync(stockSymbol, interval, range);
+            apiResponse = await ChartService.GetChartData(symbol, interval, range);
 
             if (apiResponse.IsSuccess)
             {            

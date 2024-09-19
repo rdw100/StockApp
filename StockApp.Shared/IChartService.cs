@@ -2,6 +2,6 @@
 {
     public interface IChartService
     {
-        Task<ChartResult> GetChartPriceAsync(string symbol, string interval, string range);
+        Task<ChartResult> GetChartData(string symbol, string interval, string range);
     }
 }

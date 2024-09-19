@@ -14,11 +14,11 @@ namespace StockApp.BlazorPwa.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ApiResponse<ChartResult>> GetChartDataAsync(string symbol, string interval, string range)
+        public async Task<ApiResponse<ChartResult>> GetChartData(string symbol, string interval, string range)
         {
             try
             {
-                var apiUrl = $"api/stockprice/{symbol}?interval={interval}&range={range}";
+                var apiUrl = $"api/chart/{symbol}?interval={interval}&range={range}";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 // Return success if the response is successful

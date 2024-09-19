@@ -5,6 +5,6 @@ namespace StockApp.BlazorPwa.Interfaces
 {
     public interface IChartService
     {
-        Task<ApiResponse<ChartResult>> GetChartDataAsync(string symbol, string interval, string range);
+        Task<ApiResponse<ChartResult>> GetChartData(string symbol, string interval, string range);
     }
 }
