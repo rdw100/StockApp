@@ -18,7 +18,8 @@ namespace StockApp.Api
         }
 
         [Function("GetQuoteData")]
-        public async Task<IActionResult> RunAsync([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "quote/{symbol}")] 
+        public async Task<IActionResult> RunAsync(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "quote/{symbol}")] 
             HttpRequest req, 
             string symbol,
             FunctionContext executionContext)

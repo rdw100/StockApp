@@ -6,7 +6,7 @@
 <h3>Quote</h3>
 
 <input @bind="Symbol" placeholder="Enter stock symbol" />
-<button @onclick="GetStockPrice">Get Price</button>
+<button @onclick="GetQuoteData">Get Price</button>
 
 <div class="responsive-grid">
     <div class="grid-item">
@@ -77,16 +77,11 @@
 
 @code {
     [Parameter]
-    public string Symbol { get; set; }// = "AAPL";
+    public string Symbol { get; set; }
 
     private Result quoteData = new();
 
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     GetStockPrice();
-    // }
-
-    private async Task GetStockPrice()
+    private async Task GetQuoteData()
     {
         var stockData = await quoteService.GetQuoteData(Symbol);
         quoteData = stockData.Data.QuoteResponse.Result.FirstOrDefault();
