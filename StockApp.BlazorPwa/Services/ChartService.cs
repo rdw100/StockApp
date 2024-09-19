@@ -8,19 +8,16 @@ namespace StockApp.BlazorPwa.Services
     public class ChartService : IChartService
     {
         private readonly HttpClient _httpClient;
-        private readonly IConfiguration _configuration;
 
-        public ChartService(HttpClient httpClient, IConfiguration configuration)
+        public ChartService(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _configuration = configuration;
         }
 
         public async Task<ApiResponse<ChartResult>> GetChartDataAsync(string symbol, string interval, string range)
         {
             try
             {
-                //var apiUrl = _configuration["ApiUrls:StockApi"];
                 var apiUrl = $"api/stockprice/{symbol}?interval={interval}&range={range}";
                 var response = await _httpClient.GetAsync(apiUrl);
 
@@ -48,7 +45,5 @@ namespace StockApp.BlazorPwa.Services
                 return new ApiResponse<ChartResult>($"An unexpected error occurred: {ex.Message}", 500);
             }
         }
-
     }
-
 }
