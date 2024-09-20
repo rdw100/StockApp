@@ -17,7 +17,7 @@ var host = new HostBuilder()
     .ConfigureServices((context, services) =>
     {
         services.AddHttpClient();
-        //services.AddMemoryCache();
+        services.AddMemoryCache();
         services.Configure<ServiceOptions>(context.Configuration.GetSection("ThirdPartyApi"));
         services.AddSingleton<IFreeHttpService, FreeHttpService>();
         services.AddSingleton<IChartService, ChartService>();
