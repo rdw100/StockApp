@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.Options;
-using StockApp.Shared.Interfaces;
+using StockApp.Api.Services.Interfaces;
+using StockApp.Shared;
 using System.Net.Http.Json;
 
-namespace StockApp.Shared
+namespace StockApp.Api.Services
 {
     public class ChartService : IChartService
     {

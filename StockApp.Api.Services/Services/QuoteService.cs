@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Options;
 using StockApp.Api.Services.Interfaces;
 using StockApp.Shared;
 using StockApp.Shared.Api;
@@ -11,6 +12,9 @@ namespace StockApp.Api.Services
     public class QuoteService : IQuoteService
     {
         private readonly IFreeHttpService freeHttpService;
+        private static readonly MemoryCache cache = new MemoryCache(new MemoryCacheOptions());
+        private const string CookieCacheKey = "FreeApiCookie";
+        private const string CrumbCacheKey = "FreeApiCrumb";
         private string Cookie;
         private string Crumb;
         private string Quote;
@@ -36,10 +40,18 @@ namespace StockApp.Api.Services
         /// <remarks>Requests without headers receive 429 (Too Many Requests).</remarks>
         public async Task<QuoteResult> GetQuote(string symbol)
         {
-            Cookie = await GetFreeApiCookieAsync();
-            Crumb = await GetFreeApiCrumbAsync(Cookie);
-
-            return await GetFreeApiQuoteAsync(symbol, Cookie, Crumb);
+            //Cookie = await GetFreeApiCookieAsync();
+            //Crumb = await GetFreeApiCrumbAsync(Cookie);
+            if (!cache.TryGetValue(CookieCacheKey, out string cookie) ||
+                !cache.TryGetValue(CrumbCacheKey, out string crumb))
+            {
+                cookie = await GetFreeApiCookieAsync();
+                crumb = await GetFreeApiCrumbAsync(cookie);
+                cache.Set(CookieCacheKey, cookie);
+                cache.Set(CrumbCacheKey, crumb);
+            }
+            // return await GetFreeApiQuoteAsync(symbol, Cookie, Crumb);
+            return await GetFreeApiQuoteAsync(symbol, cookie, crumb);
         }
 
         /// <summary>

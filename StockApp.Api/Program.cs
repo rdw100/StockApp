@@ -2,11 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using StockApp.Api.Services.Interfaces;
 using StockApp.Api.Services;
-using StockApp.Shared;
-using StockApp.Shared.Interfaces;
 using StockApp.Api.Services.Http;
+using StockApp.Api.Services.Interfaces;
+using StockApp.Shared;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -18,6 +17,7 @@ var host = new HostBuilder()
     .ConfigureServices((context, services) =>
     {
         services.AddHttpClient();
+        //services.AddMemoryCache();
         services.Configure<ServiceOptions>(context.Configuration.GetSection("ThirdPartyApi"));
         services.AddSingleton<IFreeHttpService, FreeHttpService>();
         services.AddSingleton<IChartService, ChartService>();

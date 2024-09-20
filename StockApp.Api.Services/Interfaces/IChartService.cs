@@ -1,4 +1,6 @@
-﻿namespace StockApp.Shared.Interfaces
+﻿using StockApp.Shared;
+
+namespace StockApp.Api.Services.Interfaces
 {
     public interface IChartService
     {
