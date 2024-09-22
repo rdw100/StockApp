@@ -16,10 +16,6 @@
       "allowedRoles": [ "authenticated" ]
     },
     {
-      "route": "/custom/*",
-      "allowedRoles": [ "custom" ]
-    },
-    {
       "route": "/api/quote/*",
       "allowedRoles": [ "authenticated" ]
     },
