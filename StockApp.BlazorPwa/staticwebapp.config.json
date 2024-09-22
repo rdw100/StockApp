@@ -17,7 +17,7 @@
     },
     {
       "route": "/api/quote/*",
-      "allowedRoles": [ "authenticated" ]
+      "allowedRoles": [ "anonymous" ]
     },
     {
       "route": "/counter/",
