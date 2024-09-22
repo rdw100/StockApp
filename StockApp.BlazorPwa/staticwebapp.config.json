@@ -5,5 +5,31 @@
   },
   "platform": {
     "apiRuntime": "dotnet-isolated:8.0"
-  }
+  },
+  "routes": [
+    {
+      "route": "/anonymous/*",
+      "allowedRoles": [ "anonymous" ]
+    },
+    {
+      "route": "/authenticated/*",
+      "allowedRoles": [ "authenticated" ]
+    },
+    {
+      "route": "/custom/*",
+      "allowedRoles": [ "custom" ]
+    },
+    {
+      "route": "/api/quote/*",
+      "allowedRoles": [ "authenticated" ]
+    },
+    {
+      "route": "/counter",
+      "allowedRoles": [ "anonymous" ]
+    },
+    {
+      "route": "/weather",
+      "allowedRoles": [ "authenticated" ]
+    }
+  ]
 }

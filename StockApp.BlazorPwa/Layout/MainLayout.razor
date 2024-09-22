@@ -1,12 +1,34 @@
 ﻿@inherits LayoutComponentBase
+@* @inject AuthenticationStateProvider AuthenticationStateProvider*@
+@* @using Microsoft.AspNetCore.Components.Authorization  *@
 
 <FluentLayout>
     <FluentHeader>
         StockApp.BlazorPwa
         <FluentSpacer />
-        <a href="/.auth/login/github?post_login_redirect_uri=https://jolly-stone-05dc7330f.5.azurestaticapps.net/success">Login</a>
-        &nbsp;&nbsp;
-        <a href="/.auth/logout">Log out</a>
+            <div>
+                <a href="/.auth/login/github">Login</a>
+                <a href="/.auth/logout">Logout</a>
+            </div>
+@*         <AuthorizeView>
+            <Authorizing>
+                <text>...</text>
+            </Authorizing>
+            <Authorized>
+                <img src="img/user.svg" />
+                <div>
+                     @if (authenticationState != null)
+                    {
+                        <p>Welcome, @authenticationState.User.Identity.Name!</p>
+                    } 
+                    <a href="/.auth/logout">Log out</a>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+            </NotAuthorized>
+        </AuthorizeView> *@
+        @* <a href="/.auth/login/github?post_login_redirect_uri=https://jolly-stone-05dc7330f.5.azurestaticapps.net/success">Login</a> *@
+
     </FluentHeader>
     <FluentStack Class="main" Orientation="Orientation.Horizontal" Width="100%">
         <NavMenu />
@@ -29,3 +51,13 @@
         <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
     </FluentFooter>
 </FluentLayout>
+
+@* @code {
+    private AuthenticationState authenticationState;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        authenticationState = authState;
+    }
+} *@
