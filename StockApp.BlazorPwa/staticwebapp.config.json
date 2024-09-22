@@ -20,11 +20,11 @@
       "allowedRoles": [ "authenticated" ]
     },
     {
-      "route": "/counter",
-      "allowedRoles": [ "anonymous" ]
+      "route": "/counter/",
+      "allowedRoles": [ "authenticated" ]
     },
     {
-      "route": "/weather",
+      "route": "/weather/*",
       "allowedRoles": [ "authenticated" ]
     }
   ]
