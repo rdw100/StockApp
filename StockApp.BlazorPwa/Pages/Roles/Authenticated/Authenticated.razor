@@ -1,0 +1,9 @@
+﻿@page "/roles/authenticated/authenticated"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "authenticated")]
+
+<h3>Authenticated</h3>
+
+@code {
+
+}

@@ -1,0 +1,9 @@
+﻿@page "/roles/anonymous/anonymous"
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "anonymous")]
+
+<h3>Anonymous</h3>
+
+@code {
+
+}
