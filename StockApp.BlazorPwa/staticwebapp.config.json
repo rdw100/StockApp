@@ -12,6 +12,14 @@
       "allowedRoles": [ "authenticated" ]
     },
     {
+      "route": "/api/hello/protected/admin",
+      "allowedRoles": [ "admin" ]
+    },
+    {
+      "route": "/api/hello/protected/superadmin",
+      "allowedRoles": [ "authenticated" ]
+    },
+    {
       "route": "/roles/anonymous/*",
       "allowedRoles": [ "anonymous" ]
     },
