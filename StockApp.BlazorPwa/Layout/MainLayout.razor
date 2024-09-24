@@ -6,13 +6,14 @@
     <FluentHeader>
         StockApp.BlazorPwa
         <FluentSpacer />
-        <a href="/.auth/login/github">GH Login</a>
+        @* <a href="/.auth/login/github">GH Login</a> *@
 @*             <div>
             <a href="/.auth/login/github?post_login_redirect_uri=https://jolly-stone-05dc7330f.5.azurestaticapps.net/success">Login</a>
                 <a href="/.auth/logout">Logout</a>
             </div> *@
             <AuthorizeView>
                 <Authorized>
+                    <strong>Auth provider:&nbsp;</strong>@context.User.Identity.AuthenticationType
                     <a href="/.auth/logout">Log out</a>
                 </Authorized>
                 <NotAuthorized>
