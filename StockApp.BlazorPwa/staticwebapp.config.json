@@ -8,6 +8,10 @@
   },
   "routes": [
     {
+      "route": "/api/hello",
+      "allowedRoles": [ "anonymous" ]
+    },
+    {
       "route": "/api/hello/protected",
       "allowedRoles": [ "authenticated" ]
     },

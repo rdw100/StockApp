@@ -13,10 +13,11 @@
     "http": {
       "routePrefix": "api"
     }
-  },
-  "extensionBundle": {
-    "id": "Microsoft.Azure.Functions.ExtensionBundle",
-    "version": "[2.*, 3.0.0)"
-  },
-  "authLevel": "function"
+  }
+  //},
+  //"extensionBundle": {
+  //  "id": "Microsoft.Azure.Functions.ExtensionBundle",
+  //  "version": "[2.*, 3.0.0)"
+  //},
+  //"authLevel": "function"
 }
