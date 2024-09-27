@@ -1,26 +1,7 @@
 ﻿@page "/"
-@using StockApp.Shared
-@using static System.Net.WebRequestMethods
-@inject IStockService StockService
-@inject HttpClient Http
 
-<h3>Stock Price</h3>
+<PageTitle>Home</PageTitle>
 
-<input @bind="Symbol" placeholder="Enter stock symbol" />
-<button @onclick="GetStockPrice">Get Price</button>
+<h1>Hello, world!</h1>
 
-<p>Service: @StockService.ServiceName</p>
-<p>Symbol: @Symbol</p>
-<p>Price: @stockPrice</p>
-
-@code {
-    private string Symbol;
-    private string stockPrice;
-
-    private async Task GetStockPrice()
-    {
-        // var result = await StockService.GetStockPriceAsync("AAPL");
-        var stockData = await Http.GetFromJsonAsync<ChartResult>($"/api/GetStockPrice?symbol={Symbol}") ?? new ChartResult { };
-        stockPrice = stockData?.Chart.Result.FirstOrDefault().Meta.RegularMarketPrice.ToString() ?? "N/A";
-    }
-}
+Welcome to your new Fluent Blazor app.

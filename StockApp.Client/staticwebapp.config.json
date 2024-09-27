@@ -1,5 +1,25 @@
 ﻿{
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": [ "/_framework/*", "/css/*" ]
+  },
+  "platform": {
+    "apiRuntime": "dotnet-isolated:8.0"
+  },
+  "routes": [
+    {
+      "route": "/counter/",
+      "allowedRoles": [ "anonymous" ]
+    },
+    {
+      "route": "/weather/*",
+      "allowedRoles": [ "authenticated" ]
+    }
+  ],
+  "responseOverrides": {
+    "401": {
+      "redirect": "/.auth/login/github?post_login_redirect_uri=.referrer",
+      "statusCode": 302
+    }
   }
 }
