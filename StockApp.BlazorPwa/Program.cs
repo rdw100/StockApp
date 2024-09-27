@@ -11,7 +11,8 @@ using StockApp.BlazorPwa.Services;
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
 //builder.Services.AddHttpClient("ServerAPI", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
 //                .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
@@ -21,9 +22,8 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 //builder.Services.AddApiAuthorization();
-builder.Services.AddOptions();
-builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
+//builder.Services.AddOptions();
+//builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
 builder.Services.AddFluentUIComponents();
 
 await builder.Build().RunAsync();

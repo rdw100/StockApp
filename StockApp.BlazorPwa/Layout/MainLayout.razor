@@ -13,7 +13,10 @@
             </div> *@
             <AuthorizeView>
                 <Authorized>
-                    <strong>Auth provider:&nbsp;</strong>@context.User.Identity.AuthenticationType
+                    Hello, @context.User.Identity.Name!
+                    &nbsp;
+                    &nbsp;
+                    @* <strong>Auth provider:&nbsp;</strong>@context.User.Identity.AuthenticationType *@
                     <a href="/.auth/logout">Log out</a>
                 </Authorized>
                 <NotAuthorized>
