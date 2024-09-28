@@ -8,6 +8,22 @@
   },
   "routes": [
     {
+      "route": "/api/hello",
+      "allowedRoles": [ "anonymous" ]
+    },
+    {
+      "route": "/api/hello/protected",
+      "allowedRoles": [ "authenticated" ]
+    },
+    {
+      "route": "/api/hello/protected/admin",
+      "allowedRoles": [ "admin" ]
+    },
+    {
+      "route": "/api/hello/protected/superadmin",
+      "allowedRoles": [ "authenticated" ]
+    },
+    {
       "route": "/counter/",
       "allowedRoles": [ "anonymous" ]
     },
