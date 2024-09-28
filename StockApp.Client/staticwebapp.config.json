@@ -8,21 +8,25 @@
   },
   "routes": [
     {
-      "route": "/api/*",
+      "route": "/stockapp.api/*",
       "rewrite": "/api"
-    },    
-    {
-      "route": "/api/",
-      "allowedRoles": [ "anonymous" ]
     },
     {
-      "route": "/api/hello",
+      "route": "/hello",
       "allowedRoles": [ "anonymous" ]
     },
+    //{
+    //  "route": "/api/hello",
+    //  "allowedRoles": [ "anonymous" ]
+    //},
     {
-      "route": "/api/hello/protected",
+      "route": "/hello/protected",
       "allowedRoles": [ "authenticated" ]
     },
+    //{
+    //  "route": "/api/hello/protected",
+    //  "allowedRoles": [ "authenticated" ]
+    //},
     {
       "route": "/api/hello/protected/admin",
       "allowedRoles": [ "admin" ]
