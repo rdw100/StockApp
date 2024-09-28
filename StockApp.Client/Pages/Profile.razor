@@ -1,4 +1,4 @@
-﻿@page "/identity"
+﻿@page "/profile"
 
 @using Microsoft.AspNetCore.Authorization
 @using System.Security.Claims
@@ -54,6 +54,11 @@
                         <td>Name</td>
                         <td>@User!.Identity!.Name</td>
                     </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>@User.Claims.FirstOrDefault(c => c.Type == "email")?.Value;</td>
+                    </tr>    
+                
                     @foreach (Claim claim in User!.Claims)
                     {
                         var claimName = claim.Type.Split('/').Last();
