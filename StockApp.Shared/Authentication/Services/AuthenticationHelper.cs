@@ -7,7 +7,7 @@ namespace StockApp.Shared.Authentication.Services
     {
         public static ClaimsPrincipal GetClaimsPrincipalFromClientPrincipal(ClientPrincipal? clientPrincipal)
         {
-            if (clientPrincipal is null || clientPrincipal.UserRoles is null || clientPrincipal.UserId is null || clientPrincipal.Email is null || clientPrincipal.UserDetails is null)
+            if (clientPrincipal is null || clientPrincipal.UserRoles is null || clientPrincipal.UserId is null || clientPrincipal.UserDetails is null)
             {
                 return new ClaimsPrincipal();
             }
@@ -24,7 +24,6 @@ namespace StockApp.Shared.Authentication.Services
                 var identity = new ClaimsIdentity(clientPrincipal.IdentityProvider);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, clientPrincipal.UserId));
                 identity.AddClaim(new Claim(ClaimTypes.Name, clientPrincipal.UserDetails));
-                identity.AddClaim(new Claim(ClaimTypes.Email, clientPrincipal.Email));
                 identity.AddClaims(clientPrincipal.UserRoles.Select(r => new Claim(ClaimTypes.Role, r)));
 
                 return new ClaimsPrincipal(identity);
