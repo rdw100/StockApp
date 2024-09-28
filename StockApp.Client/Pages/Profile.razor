@@ -54,6 +54,10 @@
                         <td>Name</td>
                         <td>@User!.Identity!.Name</td>
                     </tr>
+                    <tr>
+                        <td>AvatarURL</td>
+                        <td>@User.FindFirst(c => c.Type == "avatar_url")?.Value;</td>
+                    </tr>
                     @foreach (Claim claim in User!.Claims)
                     {
                         var claimName = claim.Type.Split('/').Last();
