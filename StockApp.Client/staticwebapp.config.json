@@ -7,26 +7,26 @@
     "apiRuntime": "dotnet-isolated:8.0"
   },
   "routes": [
-    {
-      "route": "/stockapp.api/*",
-      "rewrite": "/api"
-    },
+    //{
+    //  "route": "/stockapp.api/*",
+    //  "rewrite": "/api"
+    //},
     {
       "route": "/hello",
       "allowedRoles": [ "anonymous" ]
     },
-    //{
-    //  "route": "/api/hello",
-    //  "allowedRoles": [ "anonymous" ]
-    //},
+    {
+      "route": "/api/hello",
+      "allowedRoles": [ "anonymous" ]
+    },
     {
       "route": "/hello/protected",
       "allowedRoles": [ "authenticated" ]
     },
-    //{
-    //  "route": "/api/hello/protected",
-    //  "allowedRoles": [ "authenticated" ]
-    //},
+    {
+      "route": "/api/hello/protected",
+      "allowedRoles": [ "authenticated" ]
+    },
     {
       "route": "/api/hello/protected/admin",
       "allowedRoles": [ "admin" ]
