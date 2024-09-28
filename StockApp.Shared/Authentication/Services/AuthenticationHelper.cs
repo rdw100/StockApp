@@ -24,7 +24,6 @@ namespace StockApp.Shared.Authentication.Services
                 var identity = new ClaimsIdentity(clientPrincipal.IdentityProvider);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, clientPrincipal.UserId));
                 identity.AddClaim(new Claim(ClaimTypes.Name, clientPrincipal.UserDetails));
-                //identity.AddClaim(new Claim("avatar_url", clientPrincipal.AvatarUrl));
                 identity.AddClaims(clientPrincipal.UserRoles.Select(r => new Claim(ClaimTypes.Role, r)));
 
                 return new ClaimsPrincipal(identity);
