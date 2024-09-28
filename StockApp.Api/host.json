@@ -13,6 +13,11 @@
     "http": {
       "routePrefix": "api"
     }
+  },
+  "Host": {
+    "CORSCredentials": false,
+    "LocalHttpPort": 7263,
+    "CORS": "*"
   }
   //},
   //"extensionBundle": {
