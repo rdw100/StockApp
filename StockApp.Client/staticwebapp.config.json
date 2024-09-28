@@ -9,6 +9,10 @@
   "routes": [
     {
       "route": "/api/*",
+      "rewrite": "/api"
+    },    
+    {
+      "route": "/api/",
       "allowedRoles": [ "anonymous" ]
     },
     {
