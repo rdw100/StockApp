@@ -16,9 +16,9 @@ namespace StockApp.Isolated.Api
             _logger = logger;
         }
 
-        [Function("Hello")]
-        public async Task<IActionResult> RunHello(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "hello")] HttpRequest req)
+        [Function("Greeting")]
+        public async Task<IActionResult> RunGreeting(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "greeting")] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
