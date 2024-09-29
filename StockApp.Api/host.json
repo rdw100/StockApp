@@ -14,10 +14,14 @@
       "routePrefix": "api"
     }
   },
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated"
+  },
   "Host": {
     "CORSCredentials": false,
     "LocalHttpPort": 7263,
-    "CORS": "*"  
+    "CORS": "*"
   },
   "extensionBundle": {
     "id": "Microsoft.Azure.Functions.ExtensionBundle",

@@ -13,8 +13,8 @@ var host = new HostBuilder()
     {
         config.AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
               .AddEnvironmentVariables();
-        config.AddJsonFile("host.json", optional: true, reloadOnChange: true)
-      .AddEnvironmentVariables();
+        //config.AddJsonFile("host.json", optional: true, reloadOnChange: true)
+        //.AddEnvironmentVariables();
     })
     .ConfigureServices((context, services) =>
     {
