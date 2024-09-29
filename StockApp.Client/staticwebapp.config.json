@@ -7,11 +7,11 @@
     "apiRuntime": "dotnet-isolated:8.0"
   },
   "routes": [
-    {
-      "route": "/api/*",
-      "methods": [ "GET" ],
-      "allowedRoles": [ "anonymous" ]
-    }
+    //{
+    //  "route": "/api/*",
+    //  "methods": [ "GET" ],
+    //  "allowedRoles": [ "anonymous" ]
+    //}
     //{
     //  "route": "/stockapp.api/*",
     //  "rewrite": "/api"

@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "StockApp.Isolated.Api": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7227",
+      "launchBrowser": false
+    }
+  }
+}
