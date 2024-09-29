@@ -17,12 +17,11 @@
   "Host": {
     "CORSCredentials": false,
     "LocalHttpPort": 7263,
-    "CORS": "*"
-  }
-  //},
-  //"extensionBundle": {
-  //  "id": "Microsoft.Azure.Functions.ExtensionBundle",
-  //  "version": "[2.*, 3.0.0)"
-  //},
-  //"authLevel": "anonymous"
+    "CORS": "*"  
+  },
+  "extensionBundle": {
+    "id": "Microsoft.Azure.Functions.ExtensionBundle",
+    "version": "[2.*, 3.0.0)"
+  },
+  "authLevel": "anonymous"
 }
