@@ -7,42 +7,47 @@
     "apiRuntime": "dotnet-isolated:8.0"
   },
   "routes": [
+    {
+      "route": "/api/*",
+      "methods": [ "GET" ],
+      "allowedRoles": [ "anonymous" ]
+    }
     //{
     //  "route": "/stockapp.api/*",
     //  "rewrite": "/api"
     //},
-    {
-      "route": "/hello",
-      "allowedRoles": [ "anonymous" ]
-    },
-    {
-      "route": "/api/hello",
-      "allowedRoles": [ "anonymous" ]
-    },
-    {
-      "route": "/hello/protected",
-      "allowedRoles": [ "authenticated" ]
-    },
-    {
-      "route": "/api/hello/protected",
-      "allowedRoles": [ "authenticated" ]
-    },
-    {
-      "route": "/api/hello/protected/admin",
-      "allowedRoles": [ "admin" ]
-    },
-    {
-      "route": "/api/hello/protected/superadmin",
-      "allowedRoles": [ "authenticated" ]
-    },
-    {
-      "route": "/counter/",
-      "allowedRoles": [ "anonymous" ]
-    },
-    {
-      "route": "/weather/*",
-      "allowedRoles": [ "authenticated" ]
-    }
+    //{
+    //  "route": "/hello",
+    //  "allowedRoles": [ "anonymous" ]
+    //},
+    //{
+    //  "route": "/api/hello",
+    //  "allowedRoles": [ "anonymous" ]
+    //},
+    //{
+    //  "route": "/hello/protected",
+    //  "allowedRoles": [ "authenticated" ]
+    //},
+    //{
+    //  "route": "/api/hello/protected",
+    //  "allowedRoles": [ "authenticated" ]
+    //},
+    //{
+    //  "route": "/api/hello/protected/admin",
+    //  "allowedRoles": [ "admin" ]
+    //},
+    //{
+    //  "route": "/api/hello/protected/superadmin",
+    //  "allowedRoles": [ "authenticated" ]
+    //},
+    //{
+    //  "route": "/counter/",
+    //  "allowedRoles": [ "anonymous" ]
+    //},
+    //{
+    //  "route": "/weather/*",
+    //  "allowedRoles": [ "authenticated" ]
+    //}
   ],
   "responseOverrides": {
     "401": {
