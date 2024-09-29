@@ -1,10 +1,6 @@
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -12,7 +8,7 @@ namespace StockApp.Isolated.Api
 {
     public static class Function1
     {
-        [FunctionName("Function1")]
+        [Function("Function1")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
@@ -32,7 +28,7 @@ namespace StockApp.Isolated.Api
             return new OkObjectResult(responseMessage);
         }
 
-        [FunctionName("Hello")]
+        [Function("Hello")]
         public static async Task<IActionResult> RunHello(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "hello")] HttpRequest req,
             ILogger log)
