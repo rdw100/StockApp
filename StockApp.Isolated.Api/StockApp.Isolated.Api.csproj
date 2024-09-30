@@ -16,6 +16,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\StockApp.Api.Services\StockApp.Api.Services.csproj" />
     <ProjectReference Include="..\StockApp.Shared\StockApp.Shared.csproj" />
   </ItemGroup>
   <ItemGroup>
