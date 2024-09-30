@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Api", "StockApp.Api\StockApp.Api.csproj", "{FAF8788F-EB66-49A7-9C9D-52FA12032F34}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Shared", "StockApp.Shared\StockApp.Shared.csproj", "{D681F46B-8272-49C5-9993-E3C196BFB89F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.BlazorPwa", "StockApp.BlazorPwa\StockApp.BlazorPwa.csproj", "{32708CF6-1E81-4F70-8AC5-25FE495ABA73}"
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FAF8788F-EB66-49A7-9C9D-52FA12032F34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FAF8788F-EB66-49A7-9C9D-52FA12032F34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FAF8788F-EB66-49A7-9C9D-52FA12032F34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FAF8788F-EB66-49A7-9C9D-52FA12032F34}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D681F46B-8272-49C5-9993-E3C196BFB89F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D681F46B-8272-49C5-9993-E3C196BFB89F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D681F46B-8272-49C5-9993-E3C196BFB89F}.Release|Any CPU.ActiveCfg = Release|Any CPU
