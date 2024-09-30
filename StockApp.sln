@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Api.Services", "St
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Client", "StockApp.Client\StockApp.Client.csproj", "{4B7EC07B-CDDD-49A6-A3A0-A6A2547D915E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApp.Isolated.Api", "StockApp.Isolated.Api\StockApp.Isolated.Api.csproj", "{E2F90813-385C-4763-A959-2435B153556F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Isolated.Api", "StockApp.Isolated.Api\StockApp.Isolated.Api.csproj", "{E2F90813-385C-4763-A959-2435B153556F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

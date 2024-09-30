@@ -2,8 +2,8 @@
   "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
   "configurations": {
     "swa-auth": {
-      "appLocation": "StockApp",
-      "apiLocation": "StockApp.Api",
+      "appLocation": "StockApp.Client",
+      "apiLocation": "StockApp.Isolated.Api",
       "outputLocation": "bin\\wwwroot",
       "apiLanguage": "dotnetisolated",
       "apiVersion": "8.0",
