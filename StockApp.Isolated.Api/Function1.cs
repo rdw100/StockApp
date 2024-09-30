@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Text.Json;
 
 namespace StockApp.Isolated.Api
 {
@@ -25,7 +24,7 @@ namespace StockApp.Isolated.Api
             string name = req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
+            dynamic data = JsonSerializer.Deserialize<string>(requestBody);
             name = name ?? data?.name;
 
             string responseMessage = string.IsNullOrEmpty(name)
