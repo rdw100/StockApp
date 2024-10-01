@@ -15,6 +15,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
+builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddFluentUIComponents();
 
 await builder.Build().RunAsync();
