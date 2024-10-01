@@ -1,6 +1,6 @@
 ﻿@page "/chart"
 
-<PageTitle>Static Web App - Stock App PWA</PageTitle>
+<PageTitle>Static Web App</PageTitle>
 
 @using StockApp.Client.Interfaces
 @using StockApp.Client.Models
@@ -9,7 +9,7 @@
 @using System.Text.Json
 @inject IChartService ChartService
 
-<h3>Stock Price</h3>
+<h3>Chart</h3>
 
 <input @bind="symbol" placeholder="Enter stock symbol" />
 <button @onclick="GetChartData">Get Price</button>
