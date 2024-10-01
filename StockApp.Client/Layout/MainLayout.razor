@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <FluentLayout>
     <FluentHeader>
@@ -6,10 +7,17 @@
         <FluentSpacer/>
         <AuthorizeView>
             <Authorized>
-                <h2>Hello, @context.User?.Identity?.Name! <a href="/.auth/logout">Log out</a></h2>
+                <h5>Hello, @context.User?.Identity?.Name! <a href="/.auth/logout">Log out</a></h5>
             </Authorized>
             <NotAuthorized>
-                <h3>Please <a href="/.auth/login/github">login</a> to enable the buttons</h3>
+                @* <h5>Please <a href="/.auth/login/github">login</a> to enable the buttons</h5> *@
+                <FluentButton 
+                    OnClick="@NavigateToGitHubLogin" 
+                    Style="display: flex; align-items: center; justify-content: center;"
+                    Appearance="Appearance.Outline">
+                    <img src="../img/github-mark-c791e9551fe4/github-mark/github-mark.png" alt="GitHub Logo" style="width: 20px; height: 20px; margin-right: 8px;" />
+                    Sign In to GitHub
+                </FluentButton>
             </NotAuthorized>
         </AuthorizeView>
     </FluentHeader>
@@ -34,3 +42,10 @@
         <a href="https://learn.microsoft.com/en-us/aspnet/core/blazor" target="_blank">About Blazor</a>
     </FluentFooter>
 </FluentLayout>
+
+@code {
+    private void NavigateToGitHubLogin()
+    {
+        NavigationManager.NavigateTo("/.auth/login/github");
+    }
+}
