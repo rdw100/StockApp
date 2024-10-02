@@ -1,8 +1,9 @@
-﻿<CascadingAuthenticationState>
+﻿<CascadingAuthenticationState>    
     <Router AppAssembly="@typeof(App).Assembly">
         <Found Context="routeData">
             <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
             <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+            <FluentDesignTheme StorageName="theme" Mode="DesignThemeModes.Dark" OfficeColor="OfficeColor.Excel" />
         </Found>
         <NotFound>
             <PageTitle>Not found</PageTitle>
