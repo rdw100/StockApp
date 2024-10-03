@@ -1,0 +1,107 @@
+﻿@page "/charttoolbar"
+@using StockApp.Shared.Enums
+@using Microsoft.FluentUI.AspNetCore.Components
+@using ScottPlot
+@using ScottPlot.Blazor
+
+<FluentToolbar Style="border: 4px dashed var(--accent-fill-rest); width: 100%; margin-bottom: 24px;">
+    <FluentSelect Id="chart-listbox" @bind-Value="selectedChartType" @onchange="HandleChartTypeChange" TOption="string">
+        <FluentOption Value="Moving">Moving</FluentOption>
+        <FluentOption Value="Bollinger">Bollinger</FluentOption>
+        <FluentOption Value="Candlestick">Candlestick</FluentOption>
+    </FluentSelect>
+    @*  *@
+    <FluentSelect @bind-SelectedOption="selectedInterval" @onchange="HandleIntervalChange" TOption="StockInterval">
+        <FluentOption TOption="StockInterval" Value=@StockInterval.FiveMinutes.ToString()>5 min</FluentOption>
+        <FluentOption TOption="StockInterval" Value=@StockInterval.FifteenMinutes.ToString()>15 min</FluentOption>
+        <FluentOption TOption="StockInterval" Value=@StockInterval.ThirtyMinutes.ToString()>30 min</FluentOption>
+        <FluentOption TOption="StockInterval" Value=@StockInterval.OneHour.ToString()>1 Hour</FluentOption>
+        <FluentOption TOption="StockInterval" Value=@StockInterval.OneDay.ToString() Selected>1 Day</FluentOption>
+    </FluentSelect>
+
+    <FluentRadioGroup @bind-Value="selectedRange" @onchange="HandleRangeChange" TValue="StockRange">
+        <FluentRadio Value=@(StockRange.OneDay)>1D</FluentRadio>
+        <FluentRadio Value=@(StockRange.FiveDays) Checked="true">5D</FluentRadio>
+        <FluentRadio Value=@(StockRange.OneMonth)>1M</FluentRadio>
+        <FluentRadio Value=@(StockRange.ThreeMonths)>3M</FluentRadio>
+        <FluentRadio Value=@(StockRange.SixMonths)>6M</FluentRadio>
+        <FluentRadio Value=@(StockRange.OneYear)>1Y</FluentRadio>
+    </FluentRadioGroup>
+
+@*     <FluentDatePicker @onchange="HandleDateChangeStart" />
+    <FluentDatePicker @onchange="HandleDateChangeEnd" /> *@
+</FluentToolbar>
+
+@code {
+    [Parameter] public EventCallback<string> OnChartTypeChanged { get; set; }
+    [Parameter] public EventCallback<StockInterval> OnIntervalChanged { get; set; }
+    [Parameter] public EventCallback<StockRange> OnRangeChanged { get; set; }
+    [Parameter] public EventCallback<DateTime?> OnStartDateChanged { get; set; }
+    [Parameter] public EventCallback<DateTime?> OnEndDateChanged { get; set; }
+
+    private string selectedChartType = "Moving";
+    private StockInterval selectedInterval = StockInterval.OneDay;
+    private StockRange selectedRange = StockRange.FiveDays;
+    private DateTime? startDate = DateTime.Today.AddDays(-7);
+    private DateTime? endDate = DateTime.Today;
+
+    private async Task HandleChartTypeChange(ChangeEventArgs e)
+    {
+        string targetValue = e.Value?.ToString();
+
+        if (targetValue == "Moving" || targetValue == "Bollinger" || targetValue == "Candlestick")
+        {
+            selectedChartType = targetValue;
+            await OnChartTypeChanged.InvokeAsync(selectedChartType);
+        }
+    }
+
+    private async Task HandleIntervalChange(ChangeEventArgs e)
+    {
+        StockInterval targetValue = e.Value is string value && Enum.TryParse(value, out StockInterval result) ? result : throw new ArgumentException("Invalid range selected");
+
+        if (targetValue == StockInterval.FiveMinutes
+            || targetValue == StockInterval.FifteenMinutes
+            || targetValue == StockInterval.ThirtyMinutes
+            || targetValue == StockInterval.OneHour
+            || targetValue == StockInterval.OneDay)
+        {
+            selectedInterval = targetValue;
+            await OnIntervalChanged.InvokeAsync(selectedInterval);
+        }
+    }
+
+    private async Task HandleRangeChange(ChangeEventArgs e)
+    {
+        StockRange targetValue = e.Value is string value && Enum.TryParse(value, out StockRange result) ? result : throw new ArgumentException("Invalid range selected");
+
+        if (targetValue == StockRange.OneDay 
+            || targetValue == StockRange.FiveDays 
+            || targetValue == StockRange.OneMonth 
+            || targetValue == StockRange.ThreeMonths 
+            || targetValue == StockRange.SixMonths 
+            || targetValue == StockRange.OneYear)
+        {
+            selectedRange = targetValue;
+            await OnRangeChanged.InvokeAsync(selectedRange);
+        }
+    }
+
+    private async Task HandleDateChangeStart(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value?.ToString(), out var dateValue))
+        {
+            startDate = dateValue;
+            await OnStartDateChanged.InvokeAsync(startDate);
+        }
+    }
+
+    private async Task HandleDateChangeEnd(ChangeEventArgs e)
+    {
+        if (DateTime.TryParse(e.Value?.ToString(), out var dateValue))
+        {
+            endDate = dateValue;
+            await OnEndDateChanged.InvokeAsync(endDate);
+        }
+    }
+}

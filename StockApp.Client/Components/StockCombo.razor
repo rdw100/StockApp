@@ -1,0 +1,30 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using StockApp.Client.Interfaces
+@inject IQuoteService quoteService
+
+<FluentCombobox @bind-Value="SelectedStockSymbol" 
+    Autocomplete="ComboboxAutocomplete.Both" 
+    TOption="string"
+                Items="@quoteService.Symbols">
+</FluentCombobox>
+
+@code {
+    private string _selectedStockSymbol;
+
+    [Parameter]
+    public string SelectedStockSymbol
+    {
+        get => _selectedStockSymbol;
+        set
+        {
+            if (_selectedStockSymbol != value)
+            {
+                _selectedStockSymbol = value;
+                SelectedStockSymbolChanged.InvokeAsync(value);
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<string> SelectedStockSymbolChanged { get; set; }
+}

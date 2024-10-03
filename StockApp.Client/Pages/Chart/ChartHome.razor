@@ -1,0 +1,170 @@
+﻿@page "/charthome"
+@using BlazorPro.BlazorSize
+@using Microsoft.FluentUI.AspNetCore.Components
+@using ScottPlot
+@using ScottPlot.Blazor
+@using StockApp.Client.Components
+@using StockApp.Shared.Enums
+@inject IResizeListener listener
+@attribute [Authorize]
+
+<FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px;">
+
+    <FluentGridItem xs="12">
+        <div class="card">
+            <h6>Select a Stock Symbol&nbsp;&nbsp;<StockCombo @bind-SelectedStockSymbol="SelectedStockSymbol" /></h6>            
+        </div>
+    </FluentGridItem>
+
+    <ChartSummary Symbol="@SelectedStockSymbol" />
+
+    <FluentGridItem xs="12">
+        <div class="card">
+            <ChartToolbar
+                OnChartTypeChanged="HandleChartTypeChanged"
+                OnIntervalChanged="HandleIntervalChanged"
+                OnRangeChanged="HandleRangeChanged"
+                OnStartDateChanged="HandleStartDateChanged"
+                OnEndDateChanged="HandleEndDateChanged" />
+        </div>
+        <div class="card">
+            <ChartDisplay @ref="chartComponent" ChartStyles="@(chartStyle)" />
+        </div>          
+    </FluentGridItem>        
+    <FluentGridItem xs="12">
+        <FluentCard >
+            <QuoteSummary Symbol="@SelectedStockSymbol" />
+        </FluentCard>
+    </FluentGridItem>
+</FluentGrid>
+<FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+    <FluentAccordionItem Heading="Adaptive Rendering">
+        <FluentIcon Value="@(new Icons.Regular.Size20.Globe())" Color="@Microsoft.FluentUI.AspNetCore.Components.Color.Neutral" Slot="start" />
+        <h6>Width: @browser.Width</h6>
+        <h6>Height: @browser.Height</h6>
+        <h6>MQ: @IsXSmallMedia</h6>
+        <h6>Chart: @selectedChartType</h6>
+        <h6>Interval: @selectedInterval</h6>
+        <h6>Range: @selectedRange</h6>
+        <MemoryUsage></MemoryUsage>
+    </FluentAccordionItem>
+</FluentAccordion>
+
+@code {
+    JustifyContent Justification = JustifyContent.FlexStart;
+    int Spacing = 1;
+    private string selectedChartType = "Moving";
+    private StockInterval selectedInterval = StockInterval.OneDay;
+    private StockRange selectedRange = StockRange.FiveDays;
+    private string chartStyle = "width: 100%; height: 480px;"; //"width: 640px; height: 480px;";
+    private DateTime? startDate = DateTime.Today.AddDays(-7);
+    private DateTime? endDate = DateTime.Today;
+    private ChartDisplay chartComponent;
+    private string selectedStockSymbol = "AAPL";
+
+    public string SelectedStockSymbol
+    {
+        get => selectedStockSymbol;
+        set
+        {
+            selectedStockSymbol = value ?? "AAPL";
+            RefreshChart();
+        }
+    }
+    private void HandleChartTypeChanged(string chartType)
+    {
+        selectedChartType = chartType;
+        RefreshChart();
+    }
+
+    private void HandleIntervalChanged(StockInterval interval)
+    {
+        selectedInterval = interval;
+        RefreshChart();
+    }
+
+    private void HandleRangeChanged(StockRange range)
+    {
+        selectedRange = range;
+        RefreshChart();
+    }
+
+    private void HandleStartDateChanged(DateTime? date)
+    {
+        startDate = date;
+        RefreshChart();
+    }
+
+    private void HandleEndDateChanged(DateTime? date)
+    {
+        endDate = date;
+        RefreshChart();
+    }
+
+    private void RefreshChart()
+    {
+        chartComponent?.RefreshChart(selectedStockSymbol, selectedChartType, selectedInterval, selectedRange, startDate, endDate);
+        
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            // Subscribe to the OnResized event. This will do work when the browser is resized.
+            listener.OnResized += WindowResized;
+            RefreshChart();
+        }
+    }
+
+    BrowserWindowSize browser = new BrowserWindowSize();
+
+    bool IsXSmallMedia = false;
+    bool IsMediumMedia = false;
+    bool IsLargeMedia = false;
+
+    async void WindowResized(object _, BrowserWindowSize window)
+    {
+        // Get the browsers's width / height
+        browser = window;
+
+        // Check a media query to see if it was matched. We can do this at any time, but it's best to check on each resize
+        IsXSmallMedia = await listener.MatchMedia(Breakpoints.XSmallDown);
+        IsMediumMedia = await listener.MatchMedia(Breakpoints.MediumDown);
+        IsLargeMedia = await listener.MatchMedia(Breakpoints.LargeDown);
+
+        if (window.Width < 320)
+        {
+            chartStyle = "width: 300px; height: 200;";
+        }
+        // else if (IsXSmallMedia || window.Width < 575)
+        // {
+        //     chartStyle = "width: 500px; height: 300px;";
+        // }
+        // else if (IsMediumMedia || window.Width < 990)
+        // {
+        //     chartStyle = "width: 700px; height: 500px;";
+        // }
+        // else if (IsLargeMedia || window.Width < 1199)
+        // {
+        //     chartStyle = "width: 900px; height: 700px;";
+        // }
+
+        // We're outside of the component's lifecycle, be sure to let it know it has to re-render.
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        listener.OnResized -= WindowResized;
+    }
+
+    string activeId = "accordion-1";
+
+    FluentAccordionItem? changed;
+
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+}

@@ -1,0 +1,108 @@
+﻿@using Microsoft.FluentUI.AspNetCore.Components
+@using System.Globalization
+@using StockApp.Client.Interfaces
+@using StockApp.Shared.Api
+@inject IQuoteService quoteService
+
+@if (Data != null)
+{
+    <FluentGridItem xs="6" sm="3">
+        <FluentCard>
+            <h6>@Data.FullExchangeName - @Data.QuoteSourceName @Data.Currency</h6>
+
+            <h5>
+                <span>@Data.LongName</span>
+                <span>(@Data.Symbol)</span>
+            </h5>
+        </FluentCard>
+    </FluentGridItem>
+    <FluentGridItem xs="6" sm="3">
+        <FluentCard>
+            <h6>Market Price</h6>
+            <h5>
+                <span>@Data.RegularMarketPrice.ToString("C", CultureInfo.CurrentCulture) @Data.Currency</span>
+                <span style="color: @ChangeColor;">@ChangeString</span>
+                <span style="color: @ChangeColor;">(@PercentageChangeString)</span>
+            </h5>
+            @* <h6>Updated: @UnixTimestampCalculator.ToDateTime(Data.RegularMarketTime)</h6> *@
+        </FluentCard>
+    </FluentGridItem>
+    <FluentGridItem xs="6" sm="3">
+        <FluentCard>
+            <h6>52-Day Average</h6>
+            <h5>
+                <span>@Data.FiftyDayAverage.ToString("C", CultureInfo.CurrentCulture) @Data.Currency</span>
+                <span style="color: @FiftyTwoChangeColor;">@FiftyTwoChangeString</span>
+                <span style="color: @FiftyTwoChangeColor;">(@FiftyTwoPercentageChangeString)</span>
+            </h5>
+        </FluentCard>
+    </FluentGridItem>
+    <FluentGridItem xs="6" sm="3">
+        <FluentCard>
+            <h6>200-Day Average</h6>
+            <h5>
+                <span>@Data.TwoHundredDayAverage.ToString("C", CultureInfo.CurrentCulture) @Data.Currency</span>
+                <span style="color: @TwoHundredChangeColor;">@TwoHundredChangeString</span>
+                <span style="color: @TwoHundredChangeColor;">(@TwoHundredPercentageChangeString)</span>
+            </h5>
+        </FluentCard>
+    </FluentGridItem>
+}
+else
+{
+    <p>Loading ...</p>
+    <div style="width: 300px;display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+
+@code {
+    private Result Data { get; set; }
+
+    [Parameter]
+    public string Symbol { get; set; } 
+
+    private double Change;
+    private double PercentageChange;  
+    private string ChangeString => Change > 0 ? $"+{Change:F2}" : $"{Change:F2}";
+    private string PercentageChangeString => Change > 0 ? $"+{PercentageChange:F2}%" : $"{PercentageChange:F2}%";
+    private string ChangeColor => Change > 0 ? "green" : "red";
+
+    private double PreChange;
+    private double PrePercentageChange;
+    private string PreChangeString => PreChange > 0 ? $"+{PreChange:F2}" : $"{PreChange:F2}";
+    private string PrePercentageChangeString => PreChange > 0 ? $"+{PrePercentageChange:F2}%" : $"{PrePercentageChange:F2}%";
+    private string PreChangeColor => PreChange > 0 ? "green" : "red";
+
+    private double TwoHundredChange;
+    private double TwoHundredPercentageChange;
+    private string TwoHundredChangeString => TwoHundredChange > 0 ? $"+{TwoHundredChange:F2}" : $"{TwoHundredChange:F2}";
+    private string TwoHundredPercentageChangeString => TwoHundredChange > 0 ? $"+{TwoHundredPercentageChange:F2}%" : $"{TwoHundredPercentageChange:F2}%";
+    private string TwoHundredChangeColor => TwoHundredChange > 0 ? "green" : "red";
+
+    private double FiftyTwoChange;
+    private double FiftyTwoPercentageChange;
+    private string FiftyTwoChangeString => FiftyTwoChange > 0 ? $"+{FiftyTwoChange:F2}" : $"{FiftyTwoChange:F2}";
+    private string FiftyTwoPercentageChangeString => FiftyTwoChange > 0 ? $"+{FiftyTwoPercentageChange:F2}%" : $"{FiftyTwoPercentageChange:F2}%";
+    private string FiftyTwoChangeColor => FiftyTwoChange > 0 ? "green" : "red";
+
+    protected override async Task OnInitializedAsync()
+    {
+        Data = await LoadData(Symbol);
+        Change = Data.RegularMarketChange;
+        PercentageChange = Data.RegularMarketChangePercent;
+        PreChange = Data.PreMarketChange;
+        PrePercentageChange = Data.PreMarketChangePercent;
+        TwoHundredChange = Data.TwoHundredDayAverageChange;
+        TwoHundredPercentageChange = Data.TwoHundredDayAverageChangePercent;
+        FiftyTwoChange = Data.FiftyDayAverageChange;
+        FiftyTwoPercentageChange = Data.FiftyDayAverageChangePercent;
+    }
+
+    private async Task<Result> LoadData(string symbol)
+    {
+        var quoteData = await quoteService.GetQuoteData(Symbol);
+        Data = quoteData.Data.QuoteResponse.Result.FirstOrDefault();
+        return Data;
+    }
+}

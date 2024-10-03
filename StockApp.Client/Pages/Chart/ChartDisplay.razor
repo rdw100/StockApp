@@ -1,0 +1,136 @@
+﻿@page "/chartdisplay"
+
+@using ScottPlot.Blazor
+@using ScottPlot.Finance
+@* @using ScottPlot.Plottable *@
+@using ScottPlot
+@using StockApp.Client.Interfaces
+@using StockApp.Shared
+@using StockApp.Shared.Enums
+@inject IChartService chartService
+
+<BlazorPlot @ref="blazorPlot" Style="@(ChartStyles)" />
+
+@code {
+    [Parameter]
+    public string ChartStyles { get; set; }
+
+    private BlazorPlot blazorPlot;
+
+    public async Task RefreshChart(string symbol, string chartType, StockInterval interval, StockRange range, DateTime? startDate, DateTime? endDate)
+    {
+        blazorPlot.Reset();
+        var plt = blazorPlot.Plot;
+        plt.Clear();
+
+        // Disable zooming and panning
+        plt.PlotControl.Interaction.Disable();
+
+        // Generate sample data based on range and interval
+        List<OHLC> prices = new();
+
+        switch (range)
+        {
+            case StockRange.OneDay:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            case StockRange.FiveDays:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            case StockRange.OneMonth:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            case StockRange.ThreeMonths:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            case StockRange.SixMonths:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            case StockRange.OneYear:
+                prices = await LoadData(symbol, interval, range);
+                break;
+            default:
+                prices = await LoadData(symbol, interval, range);
+                break;
+        }
+
+        switch (chartType)
+        {
+            case "Moving":
+                plt.Add.Candlestick(prices);
+                plt.Axes.DateTimeTicksBottom();
+
+                if (range >= StockRange.OneMonth)
+                {
+                    plt = ChartHelper.PlotSmaCurves(plt, prices);
+                    plt.ShowLegend();
+                }
+                break;
+            case "Bollinger":
+                plt.Add.Candlestick(prices);
+                plt.Axes.DateTimeTicksBottom();
+
+                if (range >= StockRange.OneMonth)
+                {
+                    plt = ChartHelper.PlotBollinger(plt, prices);
+                    plt.ShowLegend();
+                }
+                break;
+            case "Candlestick": 
+                plt.Add.Candlestick(prices);
+                plt.Axes.DateTimeTicksBottom();
+                break;
+        }
+
+        plt.Title($"Data for {range} - {interval} - {chartType}");
+        plt.XLabel("Time");
+        plt.YLabel("Price");
+        // Disable interactions such as zoom and pan
+        plt.PlotControl.UserInputProcessor.IsEnabled = false;
+        blazorPlot.Refresh();
+    }
+
+    private async Task<List<OHLC>> LoadData(string symbol, StockInterval interval, StockRange range)
+    {
+        ChartResult ChartDataList = new();
+        //ChartDataList = await chartService.GetChartData(symbol, intervalString, rangeString);
+        var chartData = await chartService.GetChartData(symbol, interval.GetStringValue(), range.GetStringValue());
+        ChartDataList = chartData.Data;
+
+        TimeSpan intervalTimeSpan = new();
+        switch (interval)
+        {
+            case StockInterval.FiveMinutes:
+                intervalTimeSpan = TimeSpan.FromMinutes(5);
+                break;
+            case StockInterval.FifteenMinutes:
+                intervalTimeSpan = TimeSpan.FromMinutes(15);
+                break;
+            case StockInterval.ThirtyMinutes:
+                intervalTimeSpan = TimeSpan.FromMinutes(30);
+                break;
+            case StockInterval.OneHour:
+                intervalTimeSpan = TimeSpan.FromHours(1);
+                break;
+            case StockInterval.OneDay:
+                intervalTimeSpan = TimeSpan.FromDays(1);
+                break;
+            default:
+                throw new ArgumentException("Invalid interval");
+        }
+
+        List<OHLC> ohlcList = ChartDataList.Chart.Result[0].Indicators.Quote[0].Open
+            .Select((open, index) => new OHLC
+                {
+                    Open = open,
+                    High = ChartDataList.Chart.Result[0].Indicators.Quote[0].High[index],
+                    Low = ChartDataList.Chart.Result[0].Indicators.Quote[0].Low[index],
+                    Close = ChartDataList.Chart.Result[0].Indicators.Quote[0].Close[index],
+                    DateTime = UnixTimestampCalculator.ToDateTime(ChartDataList.Chart.Result[0].Timestamp[index]),
+                    TimeSpan = intervalTimeSpan
+                })
+            .ToList();
+
+        return ohlcList;
+    }
+}
