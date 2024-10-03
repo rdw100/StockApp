@@ -1,0 +1,46 @@
+﻿@page "/memoryusagejs"
+@inject IJSRuntime JsRuntime
+
+<h3>Memory Usage</h3>
+
+<div>
+    <p>Total JS Heap Size: @totalJSHeapSize bytes (@ConvertBytesToKB(totalJSHeapSize) KB) @ConvertBytesToMB(totalJSHeapSize) MB </p>
+    <p>Used JS Heap Size: @usedJSHeapSize bytes (@ConvertBytesToKB(usedJSHeapSize) KB) @ConvertBytesToMB(usedJSHeapSize) MB </p>
+    <p>JS Heap Size Limit: @jsHeapSizeLimit bytes (@ConvertBytesToKB(jsHeapSizeLimit) KB) @ConvertBytesToMB(jsHeapSizeLimit) MB </p>
+</div>
+
+<button @onclick="GetMemoryUsage">Refresh Memory Usage</button>
+
+@code {
+    private long totalJSHeapSize;
+    private long usedJSHeapSize;
+    private long jsHeapSizeLimit;
+
+    private async Task GetMemoryUsage()
+    {
+        var memoryUsage = await JsRuntime.InvokeAsync<MemoryUsage>("getMemoryUsage");
+        if (memoryUsage != null)
+        {
+            totalJSHeapSize = memoryUsage.TotalJSHeapSize;
+            usedJSHeapSize = memoryUsage.UsedJSHeapSize;
+            jsHeapSizeLimit = memoryUsage.JsHeapSizeLimit;
+        }
+    }
+
+    private double ConvertBytesToKB(long bytes)
+    {
+        return bytes / 1024.0;
+    }
+
+    private double ConvertBytesToMB(long bytes)
+    {
+        return bytes / (1024.0 * 1024.0);
+    }
+
+    private class MemoryUsage
+    {
+        public long TotalJSHeapSize { get; set; }
+        public long UsedJSHeapSize { get; set; }
+        public long JsHeapSizeLimit { get; set; }
+    }
+}

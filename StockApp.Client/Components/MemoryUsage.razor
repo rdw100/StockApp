@@ -1,0 +1,40 @@
+﻿@page "/memoryusage"
+
+<h3>Memory Usage</h3>
+
+<div>
+    <p>Total Memory: @totalMemory bytes @ConvertBytesToMB(totalMemory) MB (@ConvertBytesToKB(totalMemory) KB)</p>
+    <p>GC Memory: @gcMemory bytes @ConvertBytesToMB(gcMemory) MB (@ConvertBytesToKB(gcMemory) KB)</p>
+</div>
+
+<button @onclick="GetMemoryUsage">Refresh Memory Usage</button>
+
+
+@code {
+    private long totalMemory;
+    private long gcMemory;
+
+    /// <summary>
+    ///  Get the total memory used by the application from GC.
+    /// </summary>
+    /// <remarks>
+    ///  The False parameter indicates that the garbage collector 
+    ///  should not be forced to collect before returning the memory 
+    ///  usage, while True forces a garbage collection.
+    /// </remarks>
+    private void GetMemoryUsage()
+    {
+        totalMemory = GC.GetTotalMemory(false);
+        gcMemory = GC.GetTotalMemory(true);
+    }
+
+    private double ConvertBytesToKB(long bytes)
+    {
+        return bytes / 1024.0;
+    }
+
+    private double ConvertBytesToMB(long bytes)
+    {
+        return bytes / (1024.0 * 1024.0);
+    }
+}
