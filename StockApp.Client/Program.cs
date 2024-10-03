@@ -16,6 +16,8 @@ builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IChartService, ChartService>();
+builder.Services.AddSingleton<IWatchlistService, WatchlistService>();
+builder.Services.AddSingleton<IPortfolioService, PortfolioService>();
 builder.Services.AddFluentUIComponents();
 
 await builder.Build().RunAsync();

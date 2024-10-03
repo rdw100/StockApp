@@ -1,0 +1,204 @@
+﻿@page "/stockportfolio"
+@using StockApp.Client.Interfaces
+@using StockApp.Shared
+
+@inject IToastService ToastService
+@inject IQuoteService quoteService
+@inject IWatchlistService watchlistService
+
+<h3>Search</h3>
+
+<FluentAutocomplete TOption="String"
+                    AutoComplete="off"
+                    Autofocus="true"
+                    Label="Select a stock"
+                    Width="250px"
+                    Placeholder="Select stocks"
+                    OnOptionsSearch="@OnSearchAsync"
+                    MaximumSelectedOptions="3"
+                    OptionText="@(item => item)"
+                    @bind-SelectedOptions="@SelectedItems" />
+
+<p>
+    <b>Selected</b>: @(String.Join(" - ", SelectedItems.Select(i => i)))
+</p>
+
+<h3>My Watchlist</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Symbol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in SelectedItems)
+        {
+            WatchlistService.AddStock(item);
+        }
+        @foreach (var item in WatchlistService.Stocks)
+        {
+            <tr>
+                <td>@item.Symbol</td>
+                <td>
+                    <button @onclick="()=>AddStock(item.Symbol)">Add Stock</button>
+                    <button @onclick="()=>RemoveStock(item.Symbol)">Remove Stock</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>My Portfolio</h3>
+
+<table>
+    <thead>
+        <tr>
+            <th>Symbol</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var stock in PortfolioService.Stocks)
+        {
+            <tr>
+                <td>@stock.Symbol</td>
+                <td>
+                    <span>@GetFormattedPrice(@stock.Symbol)</span>
+                </td>
+                <td>
+                    <button @onclick="()=>GetStockPrice(stock.Symbol)">Get Stock Price</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p>
+    @if (errorMessage != null)
+    {
+        <span style="color: red;">@errorMessage</span>
+    }
+</p>
+
+@code {
+    IEnumerable<String> SelectedItems = Array.Empty<String>();
+
+    private async Task OnSearchAsync(OptionsSearchEventArgs<String> e)
+    {
+        e.Items = quoteService.Symbols.Where((i => i.StartsWith(e.Text, StringComparison.OrdinalIgnoreCase)))
+                                  .AsEnumerable();
+    }
+
+    private string errorMessage;
+    private string stockSymbol = string.Empty;
+    private int counter = 1;
+    [Inject] private IPortfolioService PortfolioService { get; set; }
+    [Inject] private IWatchlistService WatchlistService { get; set; }
+
+    private void AddStock(string symbol)
+    {
+        // Validate input (e.g., check if stockSymbol is not empty)
+        if (!StockExists(symbol))
+        {
+            if (!string.IsNullOrWhiteSpace(symbol))
+            {
+                // Create a new stock with the entered symbol
+                var newStock = new WatchStock
+                    {
+                        Symbol = symbol
+                    };
+
+                // Add the stock to the portfolio
+                PortfolioService.AddStock(newStock);
+                ShowToast("Added", newStock.Symbol, ToastIntent.Success);
+            }
+            else
+            {
+                ShowToast("Invalid", "is blank.", ToastIntent.Error);
+            }
+        }
+    }
+
+    private void AddWatch(string symbol)
+    {
+        // Validate input (e.g., check if stockSymbol is not empty)
+        if (!string.IsNullOrWhiteSpace(symbol))
+        {
+            // Create a new stock with the entered symbol
+            var newStock = new WatchStock
+                {
+                    Symbol = symbol
+                };
+
+            // Add the stock to the portfolio
+            WatchlistService.AddStock(newStock);
+            ShowToast("Added", newStock.Symbol, ToastIntent.Success);
+        }
+        else
+        {
+            ShowToast("Invalid", "is blank.", ToastIntent.Error);
+        }
+    }
+
+    private void RemoveStock(string symbol)
+    {
+        if (!string.IsNullOrWhiteSpace(symbol))
+        {
+            // Remove an existing stock with the entered symbol
+            var oldStock = new WatchStock
+                {
+                    Symbol = symbol
+                };
+
+            // Add the stock to the portfolio
+            PortfolioService.RemoveStock(oldStock);
+            ShowToast("Removed", oldStock.Symbol, ToastIntent.Success);
+        }
+        else
+        {
+            ShowToast("Invalid", "is blank.", ToastIntent.Error);
+        }
+    }
+
+    private bool StockExists(string symbol)
+    {
+        var exists = PortfolioService.StockExists(symbol);
+        if (exists)
+        {
+            ShowToast("{symbol}", "exists.", ToastIntent.Warning);
+        }
+        return exists;
+    }
+
+    void ShowToast(string action, string symbol, ToastIntent intent)
+    {
+        var message = $"{action} Stock {symbol} #{counter++}";
+        ToastService.ShowToast(intent, message);
+    }
+
+    private Dictionary<string, double> StockPrices = new Dictionary<string, double>();
+
+    private async Task GetStockPrice(string symbol)
+    {
+    
+        var price = await quoteService.GetQuoteData(symbol);
+
+        StockPrices[symbol] = price.Data.QuoteResponse.Result[0].RegularMarketPrice;
+
+        if (price.ErrorMessage != null)
+        {
+            errorMessage = price.ErrorMessage;
+        }
+
+        ShowToast("Retrieved", symbol, ToastIntent.Download);
+    }
+
+    private string GetFormattedPrice(string symbol)
+    {
+        if (StockPrices.TryGetValue(symbol, out var price))
+        {
+            return $"${price:F2}";
+        }
+        return "N/A";
+    }
+}
