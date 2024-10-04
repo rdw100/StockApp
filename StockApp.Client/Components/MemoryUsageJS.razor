@@ -9,7 +9,7 @@
     <p>JS Heap Size Limit: @jsHeapSizeLimit bytes (@ConvertBytesToKB(jsHeapSizeLimit) KB) @ConvertBytesToMB(jsHeapSizeLimit) MB </p>
 </div>
 
-<button @onclick="GetMemoryUsage">Refresh Memory Usage</button>
+<FluentButton Appearance="@Appearance.Accent" OnClick="GetMemoryUsage" IconStart="@(new Icons.Regular.Size16.Memory())">Memory Usage</FluentButton>
 
 @code {
     private long totalJSHeapSize;

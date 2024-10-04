@@ -3,9 +3,10 @@
 @inject IQuoteService quoteService
 
 <FluentCombobox @bind-Value="SelectedStockSymbol" 
-    Autocomplete="ComboboxAutocomplete.Both" 
+    Autocomplete="ComboboxAutocomplete.Both"
+    Label="Please select a stock Symbol:"
     TOption="string"
-                Items="@quoteService.Symbols">
+    Items="@quoteService.Symbols">
 </FluentCombobox>
 
 @code {

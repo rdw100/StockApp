@@ -6,13 +6,13 @@
 @using StockApp.Client.Components
 @using StockApp.Shared.Enums
 @inject IResizeListener listener
-@attribute [Authorize]
+@attribute [Authorize(Roles = "authenticated")]
 
 <FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px;">
 
     <FluentGridItem xs="12">
         <div class="card">
-            <h6>Select a Stock Symbol&nbsp;&nbsp;<StockCombo @bind-SelectedStockSymbol="SelectedStockSymbol" /></h6>            
+            <StockCombo @bind-SelectedStockSymbol="SelectedStockSymbol" />           
         </div>
     </FluentGridItem>
 

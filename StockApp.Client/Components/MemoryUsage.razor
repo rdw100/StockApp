@@ -1,5 +1,4 @@
 ﻿@page "/memoryusage"
-
 <h3>Memory Usage</h3>
 
 <div>
@@ -7,8 +6,7 @@
     <p>GC Memory: @gcMemory bytes @ConvertBytesToMB(gcMemory) MB (@ConvertBytesToKB(gcMemory) KB)</p>
 </div>
 
-<button @onclick="GetMemoryUsage">Refresh Memory Usage</button>
-
+<FluentButton Appearance="@Appearance.Accent" OnClick="GetMemoryUsage" IconStart="@(new Icons.Regular.Size16.Memory())">Memory Usage</FluentButton>
 
 @code {
     private long totalMemory;

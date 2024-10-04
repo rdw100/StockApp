@@ -12,8 +12,10 @@
 
 <h3>Chart</h3>
 
-<input @bind="symbol" placeholder="Enter stock symbol" />
-<button @onclick="GetChartData">Get Price</button>
+<FluentTextField @bind-Value=symbol Label="Enter a Stock Symbol:" Placeholder="AAPL"></FluentTextField>
+<p>
+    <FluentButton Appearance="@Appearance.Accent" OnClick="@GetChartData" IconStart="@(new Icons.Regular.Size20.Money())">Get Chart</FluentButton>
+</p>
 
 @if (isLoading)
 {
@@ -59,7 +61,7 @@ else
 }
 
 @code {
-    private string symbol;
+    private string symbol = "AAPL";
     private string interval = "1d";
     private string range = "5d";
     private ChartResult? chartResult;

@@ -6,8 +6,10 @@
 
 <h3>Quote</h3>
 
-<input @bind="Symbol" placeholder="Enter stock symbol" />
-<button @onclick="GetQuoteData">Get Price</button>
+<FluentTextField @bind-Value=Symbol Label="Enter a Stock Symbol:" Placeholder="AAPL"></FluentTextField>
+<p>
+    <FluentButton Appearance="@Appearance.Accent" OnClick="@GetQuoteData" IconStart="@(new Icons.Regular.Size20.Money())">Get Chart</FluentButton>
+</p>
 
 <div class="responsive-grid">
     <div class="grid-item">
@@ -78,7 +80,7 @@
 
 @code {
     [Parameter]
-    public string Symbol { get; set; }
+    public string Symbol { get; set; } = "AAPL";
 
     private Result quoteData = new();
 
