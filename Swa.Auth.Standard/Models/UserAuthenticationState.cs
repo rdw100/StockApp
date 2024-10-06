@@ -1,6 +1,4 @@
-﻿using StockApp.Shared.Authentication.Models;
-
-namespace StockApp.BlazorPwa.Authentication.Models
+﻿namespace Swa.Auth.Standard.Models
 {
     public class UserAuthenticationState
     {

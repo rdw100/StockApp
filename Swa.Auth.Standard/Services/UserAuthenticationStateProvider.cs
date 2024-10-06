@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using StockApp.Client.Authentication.Models;
-using StockApp.Shared.Authentication.Services;
+using Swa.Auth.Standard.Models;
+using Swa.Auth.Standard.Shared;
 using System.Net.Http.Json;
 using System.Security.Claims;
 
-namespace StockApp.Client.Authentication.Services
+namespace Swa.Auth.Standard.Services
 {
     public class UserAuthenticationStateProvider : AuthenticationStateProvider
     {

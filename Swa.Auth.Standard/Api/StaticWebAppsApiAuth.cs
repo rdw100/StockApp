@@ -1,11 +1,11 @@
 ﻿using Microsoft.Azure.Functions.Worker.Http;
-using StockApp.Shared.Authentication.Models;
-using StockApp.Shared.Authentication.Services;
+using Swa.Auth.Standard.Models;
+using Swa.Auth.Standard.Shared;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 
-namespace StockApp.Isolated.Api.Authentication
+namespace Swa.Auth.Standard.Api
 {
     public static class StaticWebAppsApiAuth
     {

@@ -1,6 +1,6 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using StockApp.Isolated.Api.Authentication;
+using Swa.Auth.Standard.Api;
 using System.Net;
 
 namespace StockApp.Isolated.Api

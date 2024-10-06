@@ -1,12 +1,11 @@
-using Microsoft.AspNetCore.Components.Authorization;
+using BlazorPro.BlazorSize;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.FluentUI.AspNetCore.Components;
-using StockApp.Client.Authentication.Services;
 using StockApp.Client;
 using StockApp.Client.Interfaces;
 using StockApp.Client.Services;
-using BlazorPro.BlazorSize;
+using Swa.Auth.Standard.Client;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -14,8 +13,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddMediaQueryService();
 builder.Services.AddScoped<IResizeListener, ResizeListener>();
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.Configuration["MySettings:API_Prefix"] ?? builder.HostEnvironment.BaseAddress) });
-builder.Services.AddAuthorizationCore();
-builder.Services.AddScoped<AuthenticationStateProvider, UserAuthenticationStateProvider>();
+builder.Services.AddStaticWebAppsAuthentication();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddSingleton<IWatchlistService, WatchlistService>();

@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StockApp.Shared\StockApp.Shared.csproj" />
+    <ProjectReference Include="..\Swa.Auth.Standard\Swa.Auth.Standard.csproj" />
   </ItemGroup>
 
 </Project>

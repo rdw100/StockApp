@@ -1,7 +1,7 @@
-﻿using StockApp.Shared.Authentication.Models;
+﻿using Swa.Auth.Standard.Models;
 using System.Security.Claims;
 
-namespace StockApp.Shared.Authentication.Services
+namespace Swa.Auth.Standard.Shared
 {
     public static class AuthenticationHelper
     {

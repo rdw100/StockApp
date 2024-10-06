@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\StockApp.Api.Services\StockApp.Api.Services.csproj" />
     <ProjectReference Include="..\StockApp.Shared\StockApp.Shared.csproj" />
+    <ProjectReference Include="..\Swa.Auth.Standard\Swa.Auth.Standard.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

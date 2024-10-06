@@ -1,4 +1,4 @@
-﻿namespace StockApp.Shared.Authentication.Models
+﻿namespace Swa.Auth.Standard.Models
 {
     public class ClientPrincipal
     {
