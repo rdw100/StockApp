@@ -9,21 +9,35 @@
     <p>JS Heap Size Limit: @jsHeapSizeLimit bytes (@ConvertBytesToKB(jsHeapSizeLimit) KB) @ConvertBytesToMB(jsHeapSizeLimit) MB </p>
 </div>
 
-<FluentButton Appearance="@Appearance.Accent" OnClick="GetMemoryUsage" IconStart="@(new Icons.Regular.Size16.Memory())">Memory Usage</FluentButton>
+<FluentButton Appearance="@Appearance.Accent" 
+              OnClick="GetMemoryUsage" 
+              IconStart="@(new Icons.Regular.Size16.Memory())"
+              Loading="@isLoading">
+              Memory Usage
+</FluentButton>
 
 @code {
     private long totalJSHeapSize;
     private long usedJSHeapSize;
     private long jsHeapSizeLimit;
+    private bool isLoading = false;
 
     private async Task GetMemoryUsage()
     {
-        var memoryUsage = await JsRuntime.InvokeAsync<MemoryUsage>("getMemoryUsage");
-        if (memoryUsage != null)
+        isLoading = true;
+        try
         {
-            totalJSHeapSize = memoryUsage.TotalJSHeapSize;
-            usedJSHeapSize = memoryUsage.UsedJSHeapSize;
-            jsHeapSizeLimit = memoryUsage.JsHeapSizeLimit;
+            var memoryUsage = await JsRuntime.InvokeAsync<MemoryUsage>("getMemoryUsage");
+            if (memoryUsage != null)
+            {
+                totalJSHeapSize = memoryUsage.TotalJSHeapSize;
+                usedJSHeapSize = memoryUsage.UsedJSHeapSize;
+                jsHeapSizeLimit = memoryUsage.JsHeapSizeLimit;
+            }
+        }
+        finally
+        {
+            isLoading = false;
         }
     }
 

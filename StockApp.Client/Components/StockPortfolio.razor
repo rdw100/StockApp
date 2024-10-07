@@ -11,13 +11,13 @@
 <FluentAutocomplete TOption="String"
                     AutoComplete="off"
                     Autofocus="true"
-                    Label="Select a stock"
-                    Width="250px"
+                    Label="Select a Symbol:"
                     Placeholder="Select stocks"
                     OnOptionsSearch="@OnSearchAsync"
                     MaximumSelectedOptions="3"
                     OptionText="@(item => item)"
-                    @bind-SelectedOptions="@SelectedItems" />
+                    @bind-SelectedOptions="@SelectedItems" 
+                    width="100%"/>
 
 <p>
     <b>Selected</b>: @(String.Join(" - ", SelectedItems.Select(i => i)))

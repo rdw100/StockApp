@@ -12,9 +12,14 @@
 
 <h3>Chart</h3>
 
-<FluentTextField @bind-Value=symbol Label="Enter a Stock Symbol:" Placeholder="AAPL"></FluentTextField>
+<FluentTextField @bind-Value=symbol Label="Enter a Symbol:" Placeholder="AAPL"></FluentTextField>
 <p>
-    <FluentButton Appearance="@Appearance.Accent" OnClick="@GetChartData" IconStart="@(new Icons.Regular.Size20.Money())">Get Chart</FluentButton>
+    <FluentButton Appearance="@Appearance.Accent" 
+        OnClick="@GetChartData" 
+        IconStart="@(new Icons.Regular.Size20.Money())"
+        Loading="@isLoading">
+        Get Chart
+    </FluentButton>
 </p>
 
 @if (isLoading)

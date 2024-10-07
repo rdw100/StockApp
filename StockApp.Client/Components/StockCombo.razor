@@ -4,9 +4,10 @@
 
 <FluentCombobox @bind-Value="SelectedStockSymbol" 
     Autocomplete="ComboboxAutocomplete.Both"
-    Label="Please select a stock Symbol:"
+    Label="Select a Symbol:"
     TOption="string"
-    Items="@quoteService.Symbols">
+    Items="@quoteService.Symbols"
+    Width="100%">
 </FluentCombobox>
 
 @code {

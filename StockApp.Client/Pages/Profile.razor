@@ -8,6 +8,8 @@
 
 <PageTitle>Index</PageTitle>
 
+<h3>Profile</h3>
+
 <AuthorizeView>
     <Authorized>
         <h2>Hello, @context.User?.Identity?.Name! <a href="/.auth/logout">Log out</a></h2>
@@ -19,38 +21,42 @@
 
 <div style="display: flex;">
     <div style="flex: 1; padding: 10px;">
-        @* <button @onclick="CallPublicFunction">Call Public Function</button> *@
         <FluentButton Appearance="@Appearance.Accent" 
             OnClick="@CallPublicFunction"
-            IconStart="@(new Icons.Regular.Size20.LockOpen())">Call Public Function</FluentButton>
-        
+            IconStart="@(new Icons.Regular.Size20.LockOpen())"
+            Loading="isLoadingPublic">
+            Call Public Function
+        </FluentButton>        
         <span style="font-weight: bold; color: green;">@_publicApiResponse</span>
         <p>Anonymous access</p>
 
-        @* <button @onclick="CallProtectedFunction" disabled="@(!_isUserAuthenticated)">Call Protected Function</button> *@
         <FluentButton Appearance="@Appearance.Accent"
                       OnClick="@CallProtectedFunction" 
                       Disabled="@(!_isUserAuthenticated)"
-                      IconStart="@(new Icons.Regular.Size20.LockClosed())">Call Protected Function</FluentButton>
+                      IconStart="@(new Icons.Regular.Size20.LockClosed())"
+                      Loading="isLoadingProtected">
+                      Call Protected Function
+        </FluentButton>
         <span style="font-weight: bold; color: green;">@_protectedApiResponse</span>
         <p>User needs to be authenticated</p>
 
-        @* <button @onclick="CallProtectedAdminFunction" disabled="@(!_isUserAdmin)">Call Protected Admin Function</button>         *@
-        
         <FluentButton Appearance="@Appearance.Accent"
                       OnClick="@CallProtectedAdminFunction"
                       Disabled="@(!_isUserAdmin)"
-                      IconStart="@(new Icons.Regular.Size20.ShieldLock())">Call Protected Admin Function</FluentButton>
-
+                      IconStart="@(new Icons.Regular.Size20.ShieldLock())"
+                      Loading="isLoadingAdmin">
+                      Call Protected Admin Function
+        </FluentButton>
         <span style="font-weight: bold; color: @_adminFunctionMessageColor;">@_protectedAdminApiResponse</span>
         <p>User needs to be authenticated and have 'Admin' role</p>
 
-        @* <button @onclick="CallProtectedSuperAdminFunction" disabled="@(!_isUserAuthenticated)">Unprotected Call to Super Admin Function</button> *@
         <FluentButton Appearance="@Appearance.Accent"
                       OnClick="@CallProtectedSuperAdminFunction"
                       Disabled="@(!_isUserAuthenticated)"
-                      IconStart="@(new Icons.Regular.Size20.LockMultiple())">Unprotected Call to Super Admin Function</FluentButton>
-
+                      IconStart="@(new Icons.Regular.Size20.LockMultiple())"
+                      Loading="isLoadingSuper">
+                      Unprotected Call to Super Admin Function
+        </FluentButton>
         <span style="font-weight: bold; color: @_superAdminFunctionMessageColor ;">@_protectedSuperAdminApiResponse</span>
         <p>User needs to be authenticated and have 'Super Admin' role</p>
     </div>
@@ -91,6 +97,10 @@
 
 @code {
 
+    private bool isLoadingPublic = false;
+    private bool isLoadingProtected = false;
+    private bool isLoadingAdmin = false;
+    private bool isLoadingSuper = false;
     private ClaimsPrincipal? User;
 
     private bool _isUserAuthenticated = false;
@@ -116,27 +126,58 @@
 
     private async Task CallPublicFunction()
     {
-        _publicApiResponse = await Http.GetStringAsync("api/hello");
+        isLoadingPublic = true;
+        try
+        {
+            _publicApiResponse = await Http.GetStringAsync("api/hello");
+        }
+        finally
+        {
+            isLoadingPublic = false;
+        }
     }
 
     private async Task CallProtectedFunction()
     {
-        _protectedApiResponse = await Http.GetStringAsync("api/hello/protected");
+        isLoadingProtected = true;
+        try
+        {
+            _protectedApiResponse = await Http.GetStringAsync("api/hello/protected");
+        }
+        finally
+        {
+            isLoadingProtected = false;
+        }
     }
 
     private async Task CallProtectedAdminFunction()
     {
-        var response = await Http.GetAsync("api/hello/protected/admin");
-        _protectedAdminApiResponse = await response.Content.ReadAsStringAsync();
-        _adminFunctionMessageColor = response.IsSuccessStatusCode ? "green" : "red";
+        isLoadingAdmin = true;
+        try
+        {
+            var response = await Http.GetAsync("api/hello/protected/admin");
+            _protectedAdminApiResponse = await response.Content.ReadAsStringAsync();
+            _adminFunctionMessageColor = response.IsSuccessStatusCode ? "green" : "red";
+        }
+        finally
+        {
+            isLoadingAdmin = false;
+        }
     }
-
 
     private async Task CallProtectedSuperAdminFunction()
     {
-        var response = await Http.GetAsync("api/hello/protected/superadmin");
-        _protectedSuperAdminApiResponse = await response.Content.ReadAsStringAsync();
+        isLoadingSuper = true;
+        try
+        {
+            var response = await Http.GetAsync("api/hello/protected/superadmin");
+            _protectedSuperAdminApiResponse = await response.Content.ReadAsStringAsync();
 
-        _superAdminFunctionMessageColor = response.IsSuccessStatusCode ? "green" : "red";
+            _superAdminFunctionMessageColor = response.IsSuccessStatusCode ? "green" : "red";
+        }
+        finally
+        {
+            isLoadingSuper = false;
+        }
     }
 }

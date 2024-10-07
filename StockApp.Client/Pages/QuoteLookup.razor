@@ -1,92 +1,162 @@
 ﻿@page "/quotelookup"
 @using StockApp.Client.Interfaces
+@using StockApp.Client.Models
+@using StockApp.Client.Services
 @using StockApp.Shared.Api
+@using System.Text.Json
 @inject IQuoteService quoteService
 @attribute [Authorize]
 
 <h3>Quote</h3>
 
-<FluentTextField @bind-Value=Symbol Label="Enter a Stock Symbol:" Placeholder="AAPL"></FluentTextField>
+<FluentTextField @bind-Value=Symbol Label="Enter a Symbol:" Placeholder="AAPL"></FluentTextField>
 <p>
-    <FluentButton Appearance="@Appearance.Accent" OnClick="@GetQuoteData" IconStart="@(new Icons.Regular.Size20.Money())">Get Chart</FluentButton>
+    <FluentButton Appearance="@Appearance.Accent"
+                  OnClick="@GetQuoteData"
+                  IconStart="@(new Icons.Regular.Size20.Money())"
+                  Loading="@isLoading">
+        Get Quote
+    </FluentButton>
 </p>
 
-<div class="responsive-grid">
-    <div class="grid-item">
-        <span class="label">Previous Close</span>
-        <span class="value">@quoteData.RegularMarketPreviousClose</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Volume</span>
-        <span class="value">@quoteData.RegularMarketVolume</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Earnings Date</span>
-        <span class="value">@quoteData.EarningsTimestamp</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Open</span>
-        <span class="value">@quoteData.RegularMarketOpen</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Avg. Volume (10 Day)</span>
-        <span class="value">@quoteData.AverageDailyVolume10Day</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend & Yield</span>
-        <span class="value">@quoteData.DividendYield</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Bid</span>
-        <span class="value">@quoteData.Bid</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Market Cap</span>
-        <span class="value">@quoteData.MarketCap</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend & Yield Rate</span>
-        <span class="value">@quoteData.TrailingAnnualDividendRate</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Ask</span>
-        <span class="value">@quoteData.Ask</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Average (200 Day)</span>
-        <span class="value">@quoteData.TwoHundredDayAverage</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Day's Range</span>
-        <span class="value">@quoteData.RegularMarketDayRange</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">PE Ratio</span>
-        <span class="value">@quoteData.TrailingPe</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">EPS (TTM)</span>
-        <span class="value">@quoteData.EpsTrailingTwelveMonths</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend Date</span>
-        <span class="value">@quoteData.DividendDate</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Avg. Analyst Rating</span>
-        <span class="value">@quoteData.AverageAnalystRating</span>
-    </div>
-</div>
+@if (isLoading)
+{
+    <p>Loading stock data...</p>
+}
+else if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">Error: @apiResponse.ErrorMessage (Status code: @apiResponse.StatusCode)</p>
+}
+else if (apiResponse != null)
+{
+    if (apiResponse.IsSuccess)
+    {
+        <div class="responsive-grid">
+            <div class="grid-item">
+                <span class="label">Previous Close</span>
+                <span class="value">@quoteData.RegularMarketPreviousClose</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Volume</span>
+                <span class="value">@quoteData.RegularMarketVolume</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Earnings Date</span>
+                <span class="value">@quoteData.EarningsTimestamp</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Open</span>
+                <span class="value">@quoteData.RegularMarketOpen</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Avg. Volume (10 Day)</span>
+                <span class="value">@quoteData.AverageDailyVolume10Day</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Dividend & Yield</span>
+                <span class="value">@quoteData.DividendYield</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Bid</span>
+                <span class="value">@quoteData.Bid</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Market Cap</span>
+                <span class="value">@quoteData.MarketCap</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Dividend & Yield Rate</span>
+                <span class="value">@quoteData.TrailingAnnualDividendRate</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Ask</span>
+                <span class="value">@quoteData.Ask</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Average (200 Day)</span>
+                <span class="value">@quoteData.TwoHundredDayAverage</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Day's Range</span>
+                <span class="value">@quoteData.RegularMarketDayRange</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">PE Ratio</span>
+                <span class="value">@quoteData.TrailingPe</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">EPS (TTM)</span>
+                <span class="value">@quoteData.EpsTrailingTwelveMonths</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Dividend Date</span>
+                <span class="value">@quoteData.DividendDate</span>
+            </div>
+            <div class="grid-item">
+                <span class="label">Avg. Analyst Rating</span>
+                <span class="value">@quoteData.AverageAnalystRating</span>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(statusMessage))
+        {
+            <p>@statusMessage</p>
+        }
+
+        <pre>@rawJson</pre> <!-- Displaying raw data; format as needed -->
+    }
+}
+else
+{
+    <p>No stock data available.</p>
+}
 
 @code {
     [Parameter]
     public string Symbol { get; set; } = "AAPL";
 
     private Result quoteData = new();
+    private bool isLoading = false;
+    private string errorMessage = string.Empty;
+    private string rawJson = string.Empty;
+    private string statusMessage;
+    private ApiResponse<QuoteResult> apiResponse;
+
 
     private async Task GetQuoteData()
     {
-        var stockData = await quoteService.GetQuoteData(Symbol);
-        quoteData = stockData.Data.QuoteResponse.Result.FirstOrDefault();
+        isLoading = true;
+        errorMessage = string.Empty;
+
+        try
+        {
+            // Call API & Extract the actual ChartResult from the wrapper
+            apiResponse = await quoteService.GetQuoteData(Symbol);
+            quoteData = apiResponse.Data.QuoteResponse.Result.FirstOrDefault();
+            
+            if (apiResponse.IsSuccess)
+            {
+                // Display status
+                statusMessage = $"Status Code: {(int)apiResponse.StatusCode}";
+                // Serialize the chartResult object back to JSON
+                rawJson = JsonSerializer.Serialize(apiResponse.Data, new JsonSerializerOptions { WriteIndented = true });
+            }
+            else if (apiResponse == null)
+            {
+                errorMessage = $"Data received from the server with status:  {statusMessage}";
+            }
+            else
+            {
+                errorMessage = "No data received from the server.";
+            }
+        }            
+        catch (Exception ex)
+        {
+            errorMessage = $"Failed to load stock data: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
     }
 }
