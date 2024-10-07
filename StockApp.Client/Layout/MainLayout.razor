@@ -3,7 +3,10 @@
 
 <FluentLayout>
     <FluentHeader>
-        Stocks Dashboard
+        <FluentStack VerticalAlignment="VerticalAlignment.Center">
+            <FluentIcon Value="@(new Icons.Filled.Size24.AppGeneric())" Color="@Color.Custom" CustomColor="#000"></FluentIcon>
+            <FluentLabel Typo="Typography.Header" Style="color:black;">Stocks Dashboard</FluentLabel>
+        </FluentStack>
         <FluentSpacer/>
         <AuthorizeView>
             <Authorized>

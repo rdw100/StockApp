@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Client", "StockApp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StockApp.Isolated.Api", "StockApp.Isolated.Api\StockApp.Isolated.Api.csproj", "{E2F90813-385C-4763-A959-2435B153556F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swa.Auth.Standard", "Swa.Auth.Standard\Swa.Auth.Standard.csproj", "{DA1B2148-6102-49B1-9B15-858CE0AB0C75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swa.Auth.Standard", "Swa.Auth.Standard\Swa.Auth.Standard.csproj", "{DA1B2148-6102-49B1-9B15-858CE0AB0C75}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
