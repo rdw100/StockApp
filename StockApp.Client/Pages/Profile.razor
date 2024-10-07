@@ -12,10 +12,10 @@
 
 <AuthorizeView>
     <Authorized>
-        <h2>Hello, @context.User?.Identity?.Name! <a href="/.auth/logout">Log out</a></h2>
+        <h5>Hello, @context.User?.Identity?.Name! <a href="/.auth/logout">Log out</a></h5>
     </Authorized>
     <NotAuthorized>
-        <h3>Please <a href="/.auth/login/github?post_login_redirect_uri=/">login</a> to enable the buttons</h3>
+        <h5>Please <a href="/.auth/login/github?post_login_redirect_uri=/">login</a> to enable the buttons</h5>
     </NotAuthorized>
 </AuthorizeView>
 
