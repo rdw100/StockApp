@@ -21,14 +21,6 @@
     {
       "route": "/api/hello/protected/superadmin",
       "allowedRoles": [ "authenticated" ]
-    },
-    {
-      "route": "/counter/",
-      "allowedRoles": [ "anonymous" ]
-    },
-    {
-      "route": "/weather/*",
-      "allowedRoles": [ "authenticated" ]
     }
   ],
   "responseOverrides": {
