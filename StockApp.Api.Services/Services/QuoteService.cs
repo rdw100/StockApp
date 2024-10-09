@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using StockApp.Api.Services.Interfaces;
-using StockApp.Shared;
-using StockApp.Shared.Api;
+using StockApp.Shared.Models;
+using StockApp.Shared.Settings;
 
 namespace StockApp.Api.Services
 {

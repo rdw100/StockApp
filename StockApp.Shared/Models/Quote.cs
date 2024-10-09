@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace StockApp.Shared.Api
+namespace StockApp.Shared.Models
 {
     public class QuoteResult
     {

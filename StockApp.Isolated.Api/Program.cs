@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 using StockApp.Api.Services;
 using StockApp.Api.Services.Http;
 using StockApp.Api.Services.Interfaces;
-using StockApp.Shared;
+using StockApp.Shared.Settings;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()

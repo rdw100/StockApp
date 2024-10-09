@@ -1,15 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace StockApp.Shared
+namespace StockApp.Shared.Models
 {
 
     public partial class ChartResult
     {
         [JsonPropertyName("chart")]
-        public Chart Chart { get; set; }
+        public ChartResponse Chart { get; set; }
     }
 
-    public partial class Chart
+    public partial class ChartResponse
     {
         [JsonPropertyName("result")]
         public List<Result> Result { get; set; }

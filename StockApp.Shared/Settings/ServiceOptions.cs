@@ -1,4 +1,4 @@
-﻿namespace StockApp.Shared
+﻿namespace StockApp.Shared.Settings
 {
     public class ServiceOptions
     {

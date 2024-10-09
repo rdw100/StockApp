@@ -1,4 +1,4 @@
-﻿namespace StockApp.Shared
+﻿namespace StockApp.Shared.Wrappers
 {
     /// <summary>
     /// Encapsulates responses from an API call using a standard structure.

@@ -1,4 +1,4 @@
-﻿using StockApp.Shared.Api;
+﻿using StockApp.Shared.Models;
 
 namespace StockApp.Api.Services.Interfaces
 {

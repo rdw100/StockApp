@@ -2,11 +2,12 @@
 
 @using ScottPlot.Blazor
 @using ScottPlot.Finance
-@* @using ScottPlot.Plottable *@
 @using ScottPlot
 @using StockApp.Client.Interfaces
 @using StockApp.Shared
 @using StockApp.Shared.Enums
+@using StockApp.Shared.Models
+@using StockApp.Shared.Utilities
 @inject IChartService chartService
 
 <BlazorPlot @ref="blazorPlot" Style="@(ChartStyles)" />

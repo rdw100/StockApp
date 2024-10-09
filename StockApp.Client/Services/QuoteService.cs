@@ -1,6 +1,6 @@
 ﻿using StockApp.Client.Interfaces;
 using StockApp.Client.Models;
-using StockApp.Shared.Api;
+using StockApp.Shared.Models;
 using System.Net.Http.Json;
 
 namespace StockApp.Client.Services
@@ -20,7 +20,7 @@ namespace StockApp.Client.Services
         /// </remarks>
         List<string> IQuoteService.Symbols => new()
         {
-            "AAPL", "ABNB", "ABMD", "ACGL", "ADBE", "ADI", "ADP", "ADSK", "AEP", "ALGN", "ALXN", "AMAT", "AMGN", "AMZN", "ANSS", "ASML", "ATVI", "AVGO", "BIDU", "BIIB", "BKNG", "BMRN", "CDNS", "CDW", "CERN", "CHKP", "CHTR", "CMCSA", "COST", "CPRT", "CSCO", "CSGP", "CSX", "CTAS", "CTSH", "CTXS", "DOCU", "DXCM", "EA", "EBAY", "EXC", "FAST", "FB", "FISV", "FOX", "FOXA", "GILD", "GOOG", "GOOGL", "IDXX", "ILMN", "INCY", "INTC", "INTU", "ISRG", "JD", "KHC", "KLAC", "LRCX", "LULU", "LUMN", "MAR", "MCHP", "MDLZ", "MELI", "MNST", "MRNA", "MRVL", "MSFT", "MU", "MXIM", "NFLX", "NTES", "NVDA", "NXPI", "OKTA", "ORLY", "PAYX", "PCAR", "PDD", "PEP", "PTON", "PYPL", "QCOM", "REGN", "ROST", "SBUX", "SGEN", "SIRI", "SNPS", "SPLK", "SWKS", "TCOM", "TEAM", "TSLA", "TXN", "VRSK", "VRSN", "VRTX", "WBA", "WDAY", "XEL", "XLNX", "ZM"
+            "AAPL", "AMZN", "CDW", "FB", "GOOG", "MSFT", "NFLX", "NVDA", "PAYX", "TSLA", 
         };
 
         /// <summary>

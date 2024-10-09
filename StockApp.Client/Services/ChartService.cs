@@ -1,6 +1,6 @@
 ﻿using StockApp.Client.Interfaces;
 using StockApp.Client.Models;
-using StockApp.Shared;
+using StockApp.Shared.Models;
 using System.Net.Http.Json;
 
 namespace StockApp.Client.Services

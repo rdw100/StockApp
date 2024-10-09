@@ -1,5 +1,5 @@
 ﻿using StockApp.Client.Models;
-using StockApp.Shared.Api;
+using StockApp.Shared.Models;
 
 namespace StockApp.Client.Interfaces
 {

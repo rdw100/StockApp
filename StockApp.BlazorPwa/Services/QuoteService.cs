@@ -1,6 +1,6 @@
 ﻿using StockApp.BlazorPwa.Interfaces;
 using StockApp.BlazorPwa.Models;
-using StockApp.Shared.Api;
+using StockApp.Shared.Models;
 using System.Net.Http.Json;
 
 namespace StockApp.BlazorPwa.Services

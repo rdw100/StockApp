@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using StockApp.Api.Services.Interfaces;
-using StockApp.Shared;
+using StockApp.Shared.Models;
+using StockApp.Shared.Settings;
 using System.Net.Http.Json;
 
 namespace StockApp.Api.Services

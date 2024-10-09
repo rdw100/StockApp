@@ -1,5 +1,5 @@
 ﻿using StockApp.BlazorPwa.Models;
-using StockApp.Shared;
+using StockApp.Shared.Models;
 
 namespace StockApp.BlazorPwa.Interfaces
 {
