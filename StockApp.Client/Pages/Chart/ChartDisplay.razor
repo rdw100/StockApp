@@ -95,7 +95,7 @@
     {
         ChartResult ChartDataList = new();
         //ChartDataList = await chartService.GetChartData(symbol, intervalString, rangeString);
-        var chartData = await chartService.GetChartData(symbol, interval.GetStringValue(), range.GetStringValue());
+        var chartData = await chartService.GetChartData(symbol, interval, range);
         ChartDataList = chartData.Data;
 
         TimeSpan intervalTimeSpan = new();

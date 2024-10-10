@@ -1,5 +1,6 @@
 ﻿using StockApp.Client.Interfaces;
 using StockApp.Client.Models;
+using StockApp.Shared.Enums;
 using StockApp.Shared.Models;
 using System.Net.Http.Json;
 
@@ -14,11 +15,11 @@ namespace StockApp.Client.Services
             _httpClient = httpClient;
         }
 
-        public async Task<ApiResponse<ChartResult>> GetChartData(string symbol, string interval, string range)
+        public async Task<ApiResponse<ChartResult>> GetChartData(string symbol, StockInterval interval, StockRange range)
         {
             try
             {
-                var apiUrl = $"api/chart/{symbol}?interval={interval}&range={range}";
+                var apiUrl = $"api/chart/{symbol}?interval={interval.GetStringValue()}&range={range.GetStringValue()}";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 // Return success if the response is successful
