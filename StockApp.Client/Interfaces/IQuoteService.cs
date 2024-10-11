@@ -10,5 +10,6 @@ namespace StockApp.Client.Interfaces
     {
         public List<string> Symbols { get; }
         Task<ApiResponse<QuoteResult>> GetQuoteData(string symbol);
+        Task<ApiResponse<QuoteResult>> GetQuotesData(string[] symbol);
     }
 }

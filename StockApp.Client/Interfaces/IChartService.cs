@@ -11,6 +11,5 @@ namespace StockApp.Client.Interfaces
             StockInterval interval = StockInterval.OneDay,
             StockRange range = StockRange.FiveDays
         );
-
     }
 }

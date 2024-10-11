@@ -20,7 +20,7 @@ namespace StockApp.Client.Services
         /// </remarks>
         List<string> IQuoteService.Symbols => new()
         {
-            "AAPL", "AMZN", "CDW", "FB", "GOOG", "MSFT", "NFLX", "NVDA", "PAYX", "TSLA", 
+            "AAPL", "AMZN", "CDW", "FB", "GOOG", "MSFT", "NFLX", "NVDA", "PAYX", "TSLA",
         };
 
         /// <summary>
@@ -42,6 +42,39 @@ namespace StockApp.Client.Services
             try
             {
                 var apiUrl = $"api/quote/{symbol}";
+                var response = await _httpClient.GetAsync(apiUrl);
+
+                // Return success if the response is successful
+                if (response.IsSuccessStatusCode)
+                {
+                    var stockData = await response.Content.ReadFromJsonAsync<QuoteResult>();
+                    return new ApiResponse<QuoteResult>(stockData, (int)response.StatusCode);
+                }
+                else
+                {
+                    // Handle non-success status codes by returning an error message and the status code
+                    var errorMessage = $"Error fetching stock data: {response.ReasonPhrase}";
+                    return new ApiResponse<QuoteResult>(errorMessage, (int)response.StatusCode);
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                // Handle network-related errors
+                return new ApiResponse<QuoteResult>("Network error occurred while fetching stock data.", 503);
+            }
+            catch (Exception ex)
+            {
+                // Handle other general errors
+                return new ApiResponse<QuoteResult>($"An unexpected error occurred: {ex.Message}", 500);
+            }
+        }
+
+        public async Task<ApiResponse<QuoteResult>> GetQuotesData(string[] symbols)
+        {
+            try
+            {
+                string symbolQuery = string.Join(",", symbols);
+                var apiUrl = $"api/quote/{symbolQuery}";
                 var response = await _httpClient.GetAsync(apiUrl);
 
                 // Return success if the response is successful

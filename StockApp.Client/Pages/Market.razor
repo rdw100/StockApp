@@ -1,0 +1,51 @@
+﻿@page "/market"
+
+<h3>US Market</h3>
+
+@using StockApp.Client.Interfaces
+@using StockApp.Shared.Models
+@using Microsoft.FluentUI.AspNetCore.Components
+@using ScottPlot.Blazor
+@using ScottPlot.Finance
+@using ScottPlot
+@inject IQuoteService quoteService
+@attribute [Authorize]
+
+<FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px;">
+    <FluentGridItem xs="12">
+        <FluentCard>
+            <div class="responsive-grid">
+                @if (quoteData is not null)
+                {
+                    @foreach (var quote in quoteData)
+                    {
+                        <div class="grid-item">
+                            <span class="label">@quote.Symbol</span>
+                            <span class="value">@quote.RegularMarketPrice</span>
+                        </div>
+                        <div class="grid-item">
+                            <span class="label">@quote.LongName</span>
+                            <span class="value">@quote.RegularMarketChange @quote.RegularMarketChangePercent</span>
+                        </div>
+                    }
+                }   
+            </div>
+        </FluentCard>
+    </FluentGridItem>
+</FluentGrid>
+
+@code {
+    public string[] Symbol { get; set; } = { "^DJI", "^GSPC", "^IXIC", "^RUT^DJI", "^GSPC", "^IXIC", "^RUT" };
+
+    private List<Result> quoteData = new();
+
+    JustifyContent Justification = JustifyContent.FlexStart;
+
+    int Spacing = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var stockData = await quoteService.GetQuotesData(Symbol);
+        quoteData = stockData.Data.QuoteResponse.Result;
+    }
+}
