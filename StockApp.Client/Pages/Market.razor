@@ -11,28 +11,22 @@
 @inject IQuoteService quoteService
 @attribute [Authorize]
 
-<FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px;">
-    <FluentGridItem xs="12">
-        <FluentCard>
-            <div class="responsive-grid">
-                @if (quoteData is not null)
-                {
-                    @foreach (var quote in quoteData)
-                    {
-                        <div class="grid-item">
-                            <span class="label">@quote.Symbol</span>
-                            <span class="value">@quote.RegularMarketPrice</span>
-                        </div>
-                        <div class="grid-item">
-                            <span class="label">@quote.LongName</span>
-                            <span class="value">@quote.RegularMarketChange @quote.RegularMarketChangePercent</span>
-                        </div>
-                    }
-                }   
+<div class="responsive-grid">
+    @if (quoteData is not null)
+    {
+        @foreach (var quote in quoteData)
+        {
+            <div class="grid-item">
+                <span class="label"><a href="/candlestick?symbol=@quote.Symbol">@quote.Symbol</a></span>
+                <span class="value">@quote.RegularMarketPrice.ToString("F2")</span>
             </div>
-        </FluentCard>
-    </FluentGridItem>
-</FluentGrid>
+            <div class="grid-item" style="border-bottom: 1px dashed #ccc;">
+                <span class="label">@quote.LongName</span>
+                <span class="value @(quote.RegularMarketChange >= 0 ? "text-success":"text-danger")">@quote.RegularMarketChange.ToString("F2") (@quote.RegularMarketChangePercent.ToString("F2")%)</span>
+            </div>
+        }
+    }   
+</div>
 
 @code {
     public string[] Symbol { get; set; } = { "^DJI", "^GSPC", "^IXIC", "^RUT^DJI", "^GSPC", "^IXIC", "^RUT" };
