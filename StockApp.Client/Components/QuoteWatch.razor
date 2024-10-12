@@ -7,24 +7,45 @@
 @inject IQuoteService quoteService
 @attribute [Authorize]
 
-<h3>Investors Watch</h3>
+@if (loadFailed)
+{
+    <p><span style="color: red;">@errorMessage</span></p>
+}
+else if (quoteData is null)
+{
+    <h4>Populating ...</h4>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+else if (!quoteData.Any())
+{
+    <p>Loading ...</p>
+}
+else if (quoteData is not null)
+{
+    <h3>Investors Watch</h3>
 
-<FluentHorizontalScroll Speed="600" Easing=ScrollEasing.EaseInOut Style="width:auto;height:150px;">
-    @if (quoteData is not null)
-    {
-        @foreach (var quote in quoteData)
+    <FluentHorizontalScroll Speed="600" Easing=ScrollEasing.EaseInOut Style="width:auto;height:150px;">
+        @if (quoteData is not null)
         {
-            <FluentCard>
+            @foreach (var quote in quoteData)
+            {
+                <FluentCard>
 
-                <h5><a href="/candlestick?symbol=@quote.Symbol">@quote.Symbol</a></h5>
-                <h6 style="width:125px;">@GetShortName(@quote.ShortName, 15)</h6>
-                <span class="label">@quote.RegularMarketPrice.ToString("F2")</span>
-                <span class="value @(quote.RegularMarketChange >= 0 ? "text-success" : "text-danger")">@quote.RegularMarketChangePercent.ToString("F2")%</span>
-            </FluentCard>
+                    <h5><a href="/candlestick?symbol=@quote.Symbol">@quote.Symbol</a></h5>
+                    <h6 style="width:125px;">@GetShortName(@quote.ShortName, 15)</h6>
+                    <span class="label">@quote.RegularMarketPrice.ToString("F2")</span>
+                    <span class="value @(quote.RegularMarketChange >= 0 ? "text-success" : "text-danger")">@quote.RegularMarketChangePercent.ToString("F2")%</span>
+                </FluentCard>
+            }
         }
-    }
-</FluentHorizontalScroll>
+    </FluentHorizontalScroll>
+}
+
 @code {
+    private bool loadFailed;
+    private string errorMessage;
     public string[] Symbol { get; set; } = { "NFLX", "AMZN", "GOOG", "TSLA", "DIS", "AAPL", "AMD", "NVDA", "JPM", "F", "MSFT", "PYPL", "INTC" };
 
     private List<Result> quoteData = new();
@@ -44,7 +65,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var stockData = await quoteService.GetQuotesData(Symbol);
-        quoteData = stockData.Data.QuoteResponse.Result;
+        var apiResponse = await quoteService.GetQuotesData(Symbol);
+        quoteData = apiResponse.Data.QuoteResponse.Result;
     }
 }
