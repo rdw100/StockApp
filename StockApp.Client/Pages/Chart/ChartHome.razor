@@ -8,31 +8,31 @@
 @inject IResizeListener listener
 @attribute [Authorize(Roles = "authenticated")]
 
-
 <h3>Chart</h3>
 
 <FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px;">
 
     <FluentGridItem xs="12">
-        <div class="card">
+        <FluentCard AreaRestricted="false" >
             <StockCombo @bind-SelectedStockSymbol="SelectedStockSymbol" />           
-        </div>
+        </FluentCard>
     </FluentGridItem>
-
-    <ChartSummary Symbol="@SelectedStockSymbol" />
-
+    
+        <ChartSummary Symbol="@SelectedStockSymbol" />
+    
     <FluentGridItem xs="12">
-        <div class="card">
+        <FluentCard>
+            
             <ChartToolbar
                 OnChartTypeChanged="HandleChartTypeChanged"
                 OnIntervalChanged="HandleIntervalChanged"
                 OnRangeChanged="HandleRangeChanged"
                 OnStartDateChanged="HandleStartDateChanged"
-                OnEndDateChanged="HandleEndDateChanged" />
-        </div>
-        <div class="card">
+                OnEndDateChanged="HandleEndDateChanged" />  
+        
             <ChartDisplay @ref="chartComponent" ChartStyles="@(chartStyle)" />
-        </div>          
+        
+        </FluentCard>
     </FluentGridItem>        
     <FluentGridItem xs="12">
         <FluentCard >

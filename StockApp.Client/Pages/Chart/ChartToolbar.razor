@@ -4,7 +4,7 @@
 @using ScottPlot
 @using ScottPlot.Blazor
 
-<FluentToolbar Style="border: 4px dashed var(--accent-fill-rest); width: 100%; margin-bottom: 24px;">
+<FluentToolbar Style="border: 1px solid var(--neutral-foreground-rest); width: 100%; padding:12px; margin-bottom: 24px;">
     <FluentSelect Id="chart-listbox" @bind-Value="selectedChartType" @onchange="HandleChartTypeChange" TOption="string">
         <FluentOption Value="Moving">Moving</FluentOption>
         <FluentOption Value="Bollinger">Bollinger</FluentOption>
