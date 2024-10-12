@@ -1,0 +1,219 @@
+﻿@page "/candlestick"
+
+@using ScottPlot
+@using ScottPlot.Blazor
+@using System.Globalization
+@using StockApp.Client.Components
+@using StockApp.Client.Interfaces
+@using StockApp.Client.Models
+@using StockApp.Shared.Enums
+@using StockApp.Shared.Models
+@using StockApp.Shared.Utilities
+@inject IChartService chartService
+@attribute [Authorize]
+
+<FluentDesignTheme @bind-Mode="@Mode" StorageName="theme" />
+
+@if (loadFailed)
+{
+    <p><span style="color: red;">@errorMessage</span></p>
+}
+else if (ChartDataList is null)
+{
+    <p>Populating ...</p>
+}
+else if (!ChartDataList.Data.Chart.Result.Any())
+{
+    <p>Loading ...</p>
+}
+else if (ChartDataList is not null)
+{
+    <FluentCard Style="margin-bottom:25px;">
+
+        <h3>Candlestick Chart</h3>
+
+        <StockCombo @bind-SelectedStockSymbol="Symbol" />
+
+        <h3>@ChartDataList.Data.Chart.Result[0].Meta.Symbol: @ChartDataList.Data.Chart.Result[0].Meta.FullExchangeName</h3>
+
+        <h4>
+            <span>@regularMarketPrice.ToString("C", CultureInfo.CurrentCulture) @ChartDataList.Data.Chart.Result[0].Meta.Currency</span>
+            <span style="color: @ChangeColor;">@ChangeString</span>
+            <span style="color: @ChangeColor;">(@PercentageChangeString)</span>
+        </h4>
+
+        <h6>Updated: @UnixTimestampCalculator.ToDateTime(ChartDataList.Data.Chart.Result[0].Meta.RegularMarketTime)</h6>
+
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td colspan="4">
+                        <FluentStack HorizontalGap="10">
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.OneDay)">1D</FluentButton>
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.FiveDays)">5D</FluentButton>
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.OneMonth)">1M</FluentButton>
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.ThreeMonths)">3M</FluentButton>
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.SixMonths)">6M</FluentButton>
+                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>LoadChart(symbol, Interval, StockRange.OneYear)">1Y</FluentButton>
+                        </FluentStack>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><BlazorPlot @ref=BlazorPlot Style="@ChartStyles" /></td>
+                </tr>
+                <tr>
+                    <th scope="row">Open:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.RegularMarketPrice.ToString("C", CultureInfo.CurrentCulture)</td>
+                    <th scope="row">Avg Vol:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.RegularMarketVolume.ToString("N0")</td>
+                </tr>
+                <tr>
+                    <th scope="row">High:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.RegularMarketDayHigh.ToString("C", CultureInfo.CurrentCulture)</td>
+                    <th scope="row">52wk High:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.FiftyTwoWeekHigh.ToString("C", CultureInfo.CurrentCulture)</td>
+                </tr>
+                <tr>
+                    <th scope="row">Low:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.RegularMarketDayLow.ToString("C", CultureInfo.CurrentCulture)</td>
+                    <th scope="row">52wk Low:</th>
+                    <td>@ChartDataList.Data.Chart.Result[0].Meta.FiftyTwoWeekLow.ToString("C", CultureInfo.CurrentCulture)</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </FluentCard>
+}
+
+@code {
+    private bool loadFailed;
+    private string errorMessage;
+    private ApiResponse<ChartResult> ChartDataList { get; set; }
+    private List<OHLC> prices { get; set; }
+
+    private string symbol;
+
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "symbol")]
+    public string Symbol
+    {
+        get => symbol;
+        set
+        {
+            if (symbol != value)
+            {
+                symbol = value;
+                _ = LoadChart(symbol, Interval, Range);
+            }            
+        }
+    }
+    [Parameter]
+    public StockInterval Interval { get; set; } = StockInterval.OneDay;
+    [Parameter]
+    public StockRange Range { get; set; } = StockRange.FiveDays;
+    [Parameter]
+    public string ChartStyles { get; set; }
+    public DesignThemeModes Mode { get; set; }
+    BlazorPlot BlazorPlot { get; set; } = new();
+
+    // Display Price change data
+    private double regularMarketPrice;
+    private double chartPreviousClose;
+    private double Change => regularMarketPrice - chartPreviousClose;
+    private double PercentageChange => (Change / chartPreviousClose) * 100;
+    private string ChangeString => Change > 0 ? $"+{Change:F2}" : $"{Change:F2}";
+    private string PercentageChangeString => Change > 0 ? $"+{PercentageChange:F2}%" : $"{PercentageChange:F2}%";
+    private string ChangeColor => Change > 0 ? "green" : "red";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (string.IsNullOrEmpty(Symbol))
+            {
+                Symbol = "AAPL";                
+            }
+            await LoadChart(Symbol, Interval, Range);
+        }
+    }
+
+    // get and plot time series price data
+    private async Task LoadChart(string symbol, StockInterval interval, StockRange range)
+    {
+        try
+        {
+            BlazorPlot.Plot.Clear();
+            loadFailed = false;
+            await LoadData(symbol, interval, range);
+            BlazorPlot.Refresh();
+            StateHasChanged();
+        }
+        catch (Exception ex)
+        {
+            loadFailed = true;
+            errorMessage = $"Error: {ex.Message}";
+        }
+    }
+
+    private async Task LoadData(string symbol, StockInterval interval, StockRange range)
+    {
+        prices = null;
+        prices = await GetStocks(symbol, interval, range);
+
+        regularMarketPrice = ChartDataList.Data.Chart.Result[0].Meta.RegularMarketPrice;
+        chartPreviousClose = ChartDataList.Data.Chart.Result[0].Meta.ChartPreviousClose;
+
+        BlazorPlot.Plot.Add.Candlestick(prices);
+        BlazorPlot.Plot.Axes.DateTimeTicksBottom();
+
+        if (Mode == DesignThemeModes.Dark)
+        {
+            // change figure colors
+            BlazorPlot.Plot.FigureBackground.Color = ScottPlot.Color.FromHex("#181818");
+            BlazorPlot.Plot.DataBackground.Color = ScottPlot.Color.FromHex("#1f1f1f");
+
+            // change axis and grid colors
+            BlazorPlot.Plot.Axes.Color(ScottPlot.Color.FromHex("#d7d7d7"));
+            BlazorPlot.Plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#404040");
+
+            // change legend colors
+            BlazorPlot.Plot.Legend.BackgroundColor = ScottPlot.Color.FromHex("#404040");
+            BlazorPlot.Plot.Legend.FontColor = ScottPlot.Color.FromHex("#d7d7d7");
+            BlazorPlot.Plot.Legend.OutlineColor = ScottPlot.Color.FromHex("#d7d7d7");
+        };
+    }
+
+    protected async Task<List<OHLC>> GetStocks(string symbol, StockInterval interval, StockRange range)
+    {
+        ChartDataList = await chartService.GetChartData(symbol, interval, range);
+
+        List<OHLC> ohlcList = ChartDataList.Data.Chart.Result[0].Indicators.Quote[0].Open
+            .Select((open, index) => new OHLC
+                {
+                    Open = open,
+                    High = ChartDataList.Data.Chart.Result[0].Indicators.Quote[0].High[index],
+                    Low = ChartDataList.Data.Chart.Result[0].Indicators.Quote[0].Low[index],
+                    Close = ChartDataList.Data.Chart.Result[0].Indicators.Quote[0].Close[index],
+                    DateTime = UnixTimestampCalculator.ToDateTime(ChartDataList.Data.Chart.Result[0].Timestamp[index]),
+                    TimeSpan = TimeSpan.FromDays(1.0)
+                })
+            .ToList();
+
+        loadFailed = false;
+        prices = ohlcList;
+        StateHasChanged();
+
+        return prices;
+    }
+
+    private string lastRefreshedTime;
+
+    public void Refresh()
+    {
+        lastRefreshedTime = DateTime.Now.ToString("HH:mm:ss");
+        BlazorPlot.Refresh();
+        StateHasChanged();
+    }
+}
+
+<p>Last refreshed at: @lastRefreshedTime</p>
