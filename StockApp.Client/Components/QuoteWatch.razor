@@ -11,7 +11,7 @@
 {
     <p><span style="color: red;">@errorMessage</span></p>
 }
-else if (quoteData is null)
+@* else if (quoteData is null)
 {
     <h4>Populating ...</h4>
     <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
@@ -25,7 +25,8 @@ else if (!quoteData.Any())
         <FluentProgress></FluentProgress>
     </div>
 }
-else if (quoteData is not null)
+else if (quoteData is not null) *@
+else
 {
     <h3>Investors Watch</h3>
 
