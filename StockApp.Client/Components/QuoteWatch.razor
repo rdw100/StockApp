@@ -47,15 +47,12 @@ else if (quoteData is not null)
 }
 
 @code {
-    private bool loadFailed;
-    private string errorMessage;
+    private bool loadFailed = false;
+    private string errorMessage = string.Empty;
     public string[] Symbol { get; set; } = { "NFLX", "AMZN", "GOOG", "TSLA", "DIS", "AAPL", "AMD", "NVDA", "JPM", "F", "MSFT", "PYPL", "INTC" };
 
     private List<Result> quoteData = new();
 
-    JustifyContent Justification = JustifyContent.FlexStart;
-
-    int Spacing = 1;
 
     private string GetShortName(string name, int maxLength)
     {
@@ -68,7 +65,19 @@ else if (quoteData is not null)
 
     protected override async Task OnInitializedAsync()
     {
-        var apiResponse = await quoteService.GetQuotesData(Symbol);
-        quoteData = apiResponse.Data.QuoteResponse.Result;
+        try
+        {
+            var apiResponse = await quoteService.GetQuotesData(Symbol);
+            if (apiResponse.Data is not null)
+            {
+                quoteData = apiResponse.Data.QuoteResponse.Result;
+                loadFailed = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            loadFailed = true;
+            errorMessage = $"Error: {ex.Message}";
+        }
     }
 }

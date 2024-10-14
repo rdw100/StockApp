@@ -9,11 +9,11 @@
         /// <summary>
         /// The data structure type from a successful request
         /// </summary>
-        public T Data { get; set; }
+        public T? Data { get; set; }
         /// <summary>
         /// The error message received for response failure
         /// </summary>
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
         /// <summary>
         /// The HTTP status code of the response
         /// </summary>
@@ -26,7 +26,7 @@
         /// <summary>
         /// The default constructor
         /// </summary>
-        public ApiResponse() { }
+        //public ApiResponse() { }
 
         // Constructor for successful response
         /// <summary>
