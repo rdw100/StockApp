@@ -20,7 +20,10 @@ else if (quoteData is null)
 }
 else if (!quoteData.Any())
 {
-    <p>Loading ...</p>
+    <h4>Loading ...</h4>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
 }
 else if (quoteData is not null)
 {

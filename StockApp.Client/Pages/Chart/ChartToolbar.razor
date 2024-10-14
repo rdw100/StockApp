@@ -10,7 +10,6 @@
         <FluentOption Value="Bollinger">Bollinger</FluentOption>
         <FluentOption Value="Candlestick">Candlestick</FluentOption>
     </FluentSelect>
-    @*  *@
     <FluentSelect @bind-SelectedOption="selectedInterval" @onchange="HandleIntervalChange" TOption="StockInterval">
         <FluentOption TOption="StockInterval" Value=@StockInterval.FiveMinutes.ToString()>5 min</FluentOption>
         <FluentOption TOption="StockInterval" Value=@StockInterval.FifteenMinutes.ToString()>15 min</FluentOption>
@@ -18,7 +17,6 @@
         <FluentOption TOption="StockInterval" Value=@StockInterval.OneHour.ToString()>1 Hour</FluentOption>
         <FluentOption TOption="StockInterval" Value=@StockInterval.OneDay.ToString() Selected>1 Day</FluentOption>
     </FluentSelect>
-
     <FluentRadioGroup @bind-Value="selectedRange" @onchange="HandleRangeChange" TValue="StockRange">
         <FluentRadio Value=@(StockRange.OneDay)>1D</FluentRadio>
         <FluentRadio Value=@(StockRange.FiveDays) Checked="true">5D</FluentRadio>
@@ -27,7 +25,6 @@
         <FluentRadio Value=@(StockRange.SixMonths)>6M</FluentRadio>
         <FluentRadio Value=@(StockRange.OneYear)>1Y</FluentRadio>
     </FluentRadioGroup>
-
 @*     <FluentDatePicker @onchange="HandleDateChangeStart" />
     <FluentDatePicker @onchange="HandleDateChangeEnd" /> *@
 </FluentToolbar>
