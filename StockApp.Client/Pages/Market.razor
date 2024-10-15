@@ -36,9 +36,9 @@
     protected override async Task OnInitializedAsync()
     {
         var stockData = await quoteService.GetQuotesData(Symbol);
-        if (stockData.Data is not null)
-        {
+        // if (stockData.Data is not null)
+        // {
             quoteData = stockData.Data.QuoteResponse.Result;
-        }
+        // }
     }
 }
