@@ -22,7 +22,7 @@ flowchart TD
     App-->|Integrates|Consumer([Consumer])
     Consumer-->|Requests|API
     API-->|Accesses|API_Provider([API Provider])
-    API-->|Accesses|A@{ shape: cyl, label: "NoSQL" }
+    API-->|Accesses|NoSQL[(NoSQL)]
     style User stroke:Blue,stroke-width:2px
     style PWA stroke:Indigo,stroke-width:2px
     style Consumer stroke:Green,stroke-width:2px
