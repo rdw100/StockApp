@@ -16,7 +16,7 @@ builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.
 builder.Services.AddStaticWebAppsAuthentication();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IChartService, ChartService>();
-builder.Services.AddSingleton<IWatchlistService, WatchlistService>();
+builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 builder.Services.AddSingleton<IPortfolioService, PortfolioService>();
 builder.Services.AddFluentUIComponents();
 
