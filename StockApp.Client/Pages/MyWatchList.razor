@@ -1,0 +1,127 @@
+﻿@page "/mywatchlist"
+@using System.Collections.Generic
+@using Newtonsoft.Json
+@using StockApp.Client.Interfaces
+@using StockApp.Shared.Models
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject IWatchlistService WatchListService
+
+<AuthorizeView>
+    <Authorized Context="authContext">
+
+        <h3>Watchlist</h3>
+
+        <input @bind="newStockSymbol" placeholder="Enter stock symbol" />
+        <button @onclick="AddStock">Select</button>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var stock in watchlist)
+                {
+                    <tr>
+                        <td>@stock</td>
+                        <td>
+                            <button @onclick="() => RemoveStock(stock)">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button @onclick="SaveWatchList">Save Watchlist</button>
+
+        @if (loadingMessage != null)
+        {
+            <p>@loadingMessage</p>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>Please log in to manage your watchlist.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string newStockSymbol;
+    private List<string> watchlist = new List<string>();
+    private Watch watch;
+    private string userId;
+    private bool watchListFound;
+    private string loadingMessage;
+
+    private void AddStock()
+    {
+        if (!string.IsNullOrWhiteSpace(newStockSymbol) && !watchlist.Contains(newStockSymbol))
+        {
+            watchlist.Add(newStockSymbol);
+            newStockSymbol = string.Empty;
+        }
+    }
+
+    private void RemoveStock(string stock)
+    {
+        if (watchlist.Contains(stock))
+        {
+            watchlist.Remove(stock);
+        }
+    }
+
+    private void SaveWatchList()
+    {
+        var saveWatch = new Watch
+            {
+                Id = userId,
+                UserId = userId, 
+                WatchList = new List<string>(watchlist)
+            };
+        string actionTaken;
+        // watch.Id = userId;
+        // watch.UserId = userId;
+        // watch.WatchList = watchlist;
+        if (watchListFound)
+        {
+            WatchListService.UpdateWatchlist(saveWatch);
+            actionTaken = "Updated";
+        }
+        else
+        {
+            WatchListService.SaveWatchlist(saveWatch);
+            watchListFound = true;
+            actionTaken = "Saved";
+        }
+        
+        Console.WriteLine("Watchlist saved: " + "Data: " + actionTaken + JsonConvert.SerializeObject(saveWatch));
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        userId = user.Identity.Name;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            // userWatchlist.UserId = user.Identity.Name;
+
+            try
+            {
+                watch = await WatchListService.GetWatchlist(user.Identity.Name);// userWatchlist = await  Http.GetFromJsonAsync<Watch>($"api/GetWatchlist/{userWatchlist.UserId}");
+                watchlist = watch.WatchList;
+                if ((watchlist != null) || (!watchlist.Any()))
+                {
+                    watchListFound = true;
+                }
+                //loadingMessage = null; // Clear loading message if data is successfully fetched
+            }
+            catch (Exception)
+            {
+                //loadingMessage = "No existing watchlist found. You can create a new one.";
+            }
+        }
+    }
+}
