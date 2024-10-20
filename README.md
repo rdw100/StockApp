@@ -24,7 +24,7 @@ flowchart TD
     API-->|Accesses|API_Provider([API Provider])
     API-->|Accesses|NoSQL[(NoSQL)]
     style User stroke:Blue,stroke-width:2px
-    style PWA stroke:Indigo,stroke-width:2px
+    style App stroke:Indigo,stroke-width:2px
     style Consumer stroke:Green,stroke-width:2px
     style API stroke:Orange,stroke-width:2px
     style API_Provider stroke:Red,stroke-width:2px
