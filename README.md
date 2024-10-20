@@ -18,11 +18,11 @@ title: Integrating a Third-Party API in ASP.NET Web API Project
 ---
 
 flowchart TD
-    User([User])-->|Calls|PWA
-    PWA-->|Integrates|Consumer([Consumer])
+    User([User])-->|Calls|App
+    App-->|Integrates|Consumer([Consumer])
     Consumer-->|Requests|API
     API-->|Accesses|API_Provider([API Provider])
-
+    API-->|Accesses|A@{ shape: cyl, label: "NoSQL" }
     style User stroke:Blue,stroke-width:2px
     style PWA stroke:Indigo,stroke-width:2px
     style Consumer stroke:Green,stroke-width:2px
