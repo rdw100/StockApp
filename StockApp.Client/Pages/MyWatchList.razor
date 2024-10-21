@@ -4,15 +4,32 @@
 @using StockApp.Client.Interfaces
 @using StockApp.Shared.Models
 @inject AuthenticationStateProvider AuthenticationStateProvider
+
+@inject IToastService ToastService
 @inject IWatchlistService WatchListService
+@inject IQuoteService quoteService
 
 <AuthorizeView>
     <Authorized Context="authContext">
+        <h3>Search</h3>
+
+        <FluentAutocomplete TOption="String"
+                            AutoComplete="off"
+                            Autofocus="true"
+                            Label="Select a Symbol:"
+                            Placeholder="Select stocks"
+                            OnOptionsSearch="@OnSearchAsync"
+                            MaximumSelectedOptions="3"
+                            OptionText="@(item => item)"
+                            @bind-SelectedOptions="@WatchList" 
+                            OnChange="OnStockChange"
+                            width="100%" />
+
+        <p>
+            <b>Selected</b>: @(String.Join(" - ", WatchList.Select(i => i)))
+        </p>
 
         <h3>Watchlist</h3>
-
-        <input @bind="newStockSymbol" placeholder="Enter stock symbol" />
-        <button @onclick="AddStock">Select</button>
 
         <table>
             <thead>
@@ -22,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var stock in watchlist)
+                @foreach (var stock in WatchList)
                 {
                     <tr>
                         <td>@stock</td>
@@ -34,12 +51,22 @@
             </tbody>
         </table>
 
-        <button @onclick="SaveWatchList">Save Watchlist</button>
+        @* <button @onclick="SaveWatchList">Save Watchlist</button> *@
+
+        <p>
+            <FluentButton Appearance="@Appearance.Accent"
+                          OnClick="@SaveWatchList"
+                          IconStart="@(new Icons.Regular.Size20.Save())"
+                          Loading="@isLoading">
+                Save Watchlist
+            </FluentButton>
+        </p>
 
         @if (loadingMessage != null)
         {
             <p>@loadingMessage</p>
         }
+
     </Authorized>
     <NotAuthorized>
         <p>Please log in to manage your watchlist.</p>
@@ -47,42 +74,88 @@
 </AuthorizeView>
 
 @code {
-    private string newStockSymbol;
-    private List<string> watchlist = new List<string>();
     private Watch watch;
     private string userId;
     private bool watchListFound;
     private string loadingMessage;
+    private IEnumerable<String> WatchList = Array.Empty<String>();
+    int counter = 1;
+    private bool isLoading = false;
 
-    private void AddStock()
+    private async Task OnSearchAsync(OptionsSearchEventArgs<String> e)
     {
-        if (!string.IsNullOrWhiteSpace(newStockSymbol) && !watchlist.Contains(newStockSymbol))
+        e.Items = quoteService.Symbols.Where((i => i.StartsWith(e.Text, StringComparison.OrdinalIgnoreCase)))
+                                  .AsEnumerable();
+    }
+
+    private void OnStockChange(ChangeEventArgs e)
+    {
+        var newValue = e.Value.ToString();
+        if (!string.IsNullOrEmpty(newValue))
         {
-            watchlist.Add(newStockSymbol);
-            newStockSymbol = string.Empty;
+            if (!WatchList.Contains(newValue))
+            {
+                AddStock(newValue);
+            }
+            else
+            {
+                RemoveStock(newValue);
+            }            
+        }
+    }
+
+    private async Task AddStock(string stock)
+    {
+        if (!string.IsNullOrWhiteSpace(stock) && !StockExists(stock))
+        {
+            WatchList = WatchList.Append(stock).ToList();
+            ShowToast("Added", stock, ToastIntent.Success);
+            loadingMessage = $"Added {stock}.";
+        }
+        else
+        {
+            ShowToast("Invalid", "is blank.", ToastIntent.Error);
+            loadingMessage = $"Invalid {stock}.";
         }
     }
 
     private void RemoveStock(string stock)
     {
-        if (watchlist.Contains(stock))
+        if (!string.IsNullOrWhiteSpace(stock))
         {
-            watchlist.Remove(stock);
+            WatchList = WatchList.Where(t => t != stock).ToList();
+            ShowToast("Removed", stock, ToastIntent.Success);
+            loadingMessage = $"Removed {stock}.";
         }
+        else
+        {
+            ShowToast("Invalid", "is blank.", ToastIntent.Error);
+            loadingMessage = $"Invalid {stock}.";
+        }
+    }
+
+    private bool StockExists(string stock)
+    {
+        var exists = WatchList.Contains(stock);
+
+        if (exists)
+        {
+            ShowToast(stock, "exists.", ToastIntent.Warning);
+        }
+        return exists;
     }
 
     private void SaveWatchList()
     {
+        isLoading = true;
         var saveWatch = new Watch
             {
                 Id = userId,
                 UserId = userId, 
-                WatchList = new List<string>(watchlist)
+                WatchList = new List<string>(WatchList)
             };
         string actionTaken;
-        // watch.Id = userId;
-        // watch.UserId = userId;
-        // watch.WatchList = watchlist;
+
         if (watchListFound)
         {
             WatchListService.UpdateWatchlist(saveWatch);
@@ -94,8 +167,14 @@
             watchListFound = true;
             actionTaken = "Saved";
         }
-        
+
+        loadingMessage = $"{actionTaken} Watchlist.";
+
+        ShowToast("Saved", "Data " + actionTaken, ToastIntent.Success);
+
         Console.WriteLine("Watchlist saved: " + "Data: " + actionTaken + JsonConvert.SerializeObject(saveWatch));
+
+        isLoading = false;
     }
 
     protected override async Task OnInitializedAsync()
@@ -106,22 +185,27 @@
 
         if (user.Identity.IsAuthenticated)
         {
-            // userWatchlist.UserId = user.Identity.Name;
-
             try
             {
-                watch = await WatchListService.GetWatchlist(user.Identity.Name);// userWatchlist = await  Http.GetFromJsonAsync<Watch>($"api/GetWatchlist/{userWatchlist.UserId}");
-                watchlist = watch.WatchList;
-                if ((watchlist != null) || (!watchlist.Any()))
+                watch = await WatchListService.GetWatchlist(user.Identity.Name);
+                
+                if ((WatchList != null) || (!WatchList.Any()))
                 {
+                    WatchList = watch.WatchList;
                     watchListFound = true;
                 }
-                //loadingMessage = null; // Clear loading message if data is successfully fetched
+                loadingMessage = null; 
             }
             catch (Exception)
             {
-                //loadingMessage = "No existing watchlist found. You can create a new one.";
+                loadingMessage = "No existing watchlist found. You can create a new one.";
             }
         }
+    }
+
+    void ShowToast(string action, string symbol, ToastIntent intent)
+    {
+        var message = $"{action} Stock {symbol} #{counter++}";
+        ToastService.ShowToast(intent, message);
     }
 }
