@@ -11,22 +11,7 @@
 {
     <p><span style="color: red;">@errorMessage</span></p>
 }
-else if (quoteData is null)
-{
-    <h4>Populating ...</h4>
-    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-        <FluentProgress></FluentProgress>
-    </div>
-}
-@* else if (!quoteData.Any())
-{
-    <h4>Loading ...</h4>
-    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-        <FluentProgress></FluentProgress>
-    </div>
-}
-else if (quoteData is not null) *@
-else
+else if (quoteData != null)
 {
     <h3>Investors Watch</h3>
 
@@ -45,6 +30,13 @@ else
             }
         }
     </FluentHorizontalScroll>
+}
+else
+{
+    <h4>Loading ...</h4>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
 }
 
 @code {
@@ -69,11 +61,11 @@ else
         try
         {
             var apiResponse = await quoteService.GetQuotesData(Symbol);
-            if (apiResponse.Data is not null)
-            {
+            // if (apiResponse.Data is not null)
+            // {
                 quoteData = apiResponse.Data.QuoteResponse.Result;
                 loadFailed = false;
-            }
+            // }
         }
         catch (Exception ex)
         {
