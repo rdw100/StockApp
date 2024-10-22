@@ -44,14 +44,17 @@
                     <tr>
                         <td>@stock</td>
                         <td>
-                            <button @onclick="() => RemoveStock(stock)">Remove</button>
+                            <FluentButton Appearance="@Appearance.Neutral"
+                                          OnClick="() => RemoveStock(stock)"
+                                          IconStart="@(new Icons.Regular.Size20.SubtractCircle())"
+                                          Loading="@isLoading">
+                                Remove
+                            </FluentButton>
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
-
-        @* <button @onclick="SaveWatchList">Save Watchlist</button> *@
 
         <p>
             <FluentButton Appearance="@Appearance.Accent"

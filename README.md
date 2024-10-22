@@ -28,3 +28,4 @@ flowchart TD
     style Consumer stroke:Green,stroke-width:2px
     style API stroke:Orange,stroke-width:2px
     style API_Provider stroke:Red,stroke-width:2px
+    style NoSQL stroke:Red,stroke-width:2px
