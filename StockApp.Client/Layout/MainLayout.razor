@@ -61,6 +61,9 @@
 </FluentLayout>
 
 @code {
+    [Inject]
+    private HttpClient HttpClient { get; set; }
+
     private void NavigateToGitHubLogin()
     {
         NavigationManager.NavigateTo("/.auth/login/github", true);
@@ -72,5 +75,18 @@
     private void NavigateToSettings()
     {
         NavigationManager.NavigateTo("/themechooser", false);
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        // Pre-warm the Azure Function
+        var response = await HttpClient.GetAsync("/api/hello");
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Azure Function pre-warmed successfully.");
+        }
+        else
+        {
+            Console.WriteLine("Failed to pre-warm Azure Function.");
+        }
     }
 }
