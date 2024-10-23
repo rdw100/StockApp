@@ -4,7 +4,14 @@
 @using StockApp.Shared.Models
 @inject IQuoteService quoteService
 
-@if (Data != null)
+@if (Data == null)
+{
+    <p>Loading ...</p>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+else
 {
     <FluentGridItem xs="6" sm="3">
         <FluentCard>
@@ -47,13 +54,6 @@
             </h5>
         </FluentCard>
     </FluentGridItem>
-}
-else
-{
-    <p>Loading ...</p>
-    <div style="width: 300px;display: grid; grid-gap: 12px; grid-auto-flow: column;">
-        <FluentProgress></FluentProgress>
-    </div>
 }
 
 @code {
@@ -101,6 +101,7 @@ else
 
     private async Task<Result> LoadData(string symbol)
     {
+        await Task.Delay(1000); // 1 seconds delay
         var quoteData = await quoteService.GetQuoteData(Symbol);
         Data = quoteData.Data.QuoteResponse.Result.FirstOrDefault();
         return Data;

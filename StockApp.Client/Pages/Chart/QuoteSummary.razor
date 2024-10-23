@@ -7,72 +7,82 @@
 @using ScottPlot
 @inject IQuoteService quoteService
 
-<div class="responsive-grid">
-    <div class="grid-item">
-        <span class="label">Previous Close</span>
-        <span class="value">@quoteData.RegularMarketPreviousClose</span>
+@if (quoteData == null)
+{
+    <p>Loading ...</p>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
     </div>
-    <div class="grid-item">
-        <span class="label">Volume</span>
-        <span class="value">@quoteData.RegularMarketVolume</span>
+}
+else
+{
+    <div class="responsive-grid">
+        <div class="grid-item">
+            <span class="label">Previous Close</span>
+            <span class="value">@quoteData.RegularMarketPreviousClose</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Volume</span>
+            <span class="value">@quoteData.RegularMarketVolume</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Earnings Date</span>
+            <span class="value">@quoteData.EarningsTimestamp</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Open</span>
+            <span class="value">@quoteData.RegularMarketOpen</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Avg. Volume (10 Day)</span>
+            <span class="value">@quoteData.AverageDailyVolume10Day</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Dividend & Yield</span>
+            <span class="value">@quoteData.DividendYield</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Bid</span>
+            <span class="value">@quoteData.Bid</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Market Cap</span>
+            <span class="value">@quoteData.MarketCap</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Dividend & Yield Rate</span>
+            <span class="value">@quoteData.TrailingAnnualDividendRate</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Ask</span>
+            <span class="value">@quoteData.Ask</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Average (200 Day)</span>
+            <span class="value">@quoteData.TwoHundredDayAverage</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Day's Range</span>
+            <span class="value">@quoteData.RegularMarketDayRange</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">PE Ratio</span>
+            <span class="value">@quoteData.TrailingPe</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">EPS (TTM)</span>
+            <span class="value">@quoteData.EpsTrailingTwelveMonths</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Dividend Date</span>
+            <span class="value">@quoteData.DividendDate</span>
+        </div>
+        <div class="grid-item">
+            <span class="label">Avg. Analyst Rating</span>
+            <span class="value">@quoteData.AverageAnalystRating</span>
+        </div>
     </div>
-    <div class="grid-item">
-        <span class="label">Earnings Date</span>
-        <span class="value">@quoteData.EarningsTimestamp</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Open</span>
-        <span class="value">@quoteData.RegularMarketOpen</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Avg. Volume (10 Day)</span>
-        <span class="value">@quoteData.AverageDailyVolume10Day</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend & Yield</span>
-        <span class="value">@quoteData.DividendYield</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Bid</span>
-        <span class="value">@quoteData.Bid</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Market Cap</span>
-        <span class="value">@quoteData.MarketCap</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend & Yield Rate</span>
-        <span class="value">@quoteData.TrailingAnnualDividendRate</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Ask</span>
-        <span class="value">@quoteData.Ask</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Average (200 Day)</span>
-        <span class="value">@quoteData.TwoHundredDayAverage</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Day's Range</span>
-        <span class="value">@quoteData.RegularMarketDayRange</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">PE Ratio</span>
-        <span class="value">@quoteData.TrailingPe</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">EPS (TTM)</span>
-        <span class="value">@quoteData.EpsTrailingTwelveMonths</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Dividend Date</span>
-        <span class="value">@quoteData.DividendDate</span>
-    </div>
-    <div class="grid-item">
-        <span class="label">Avg. Analyst Rating</span>
-        <span class="value">@quoteData.AverageAnalystRating</span>
-    </div>
-</div>
+}
 
 @code {
     [Parameter]
@@ -82,6 +92,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(1500); // 1.5 seconds delay
         var stockData = await quoteService.GetQuoteData(Symbol);
         quoteData = stockData.Data.QuoteResponse.Result.FirstOrDefault();
     }
