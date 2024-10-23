@@ -21,12 +21,12 @@
                             OnOptionsSearch="@OnSearchAsync"
                             MaximumSelectedOptions="3"
                             OptionText="@(item => item)"
-                            @bind-SelectedOptions="@WatchList" 
+                            @bind-SelectedOptions="@MyWatchList" 
                             OnChange="OnStockChange"
                             width="100%" />
 
         <p>
-            <b>Selected</b>: @(String.Join(" - ", WatchList.Select(i => i)))
+            <b>Selected</b>: @(String.Join(" - ", MyWatchList.Select(i => i)))
         </p>
 
         <h3>Watchlist</h3>
@@ -39,7 +39,7 @@
                 </tr>
             </thead>
             <tbody>
-                @if ((WatchList == null || !WatchList.Any()))
+                @if ((MyWatchList == null || !MyWatchList.Any()))
                 {
                     <h4>Loading ...</h4>
                     <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
@@ -48,7 +48,7 @@
                 }
                 else
                 {
-                    @foreach (var stock in WatchList)
+                    @foreach (var stock in MyWatchList)
                     {
                         <tr>
                             <td>@stock</td>
@@ -91,7 +91,7 @@
     private string userId;
     private bool watchListFound;
     private string loadingMessage;
-    private IEnumerable<String> WatchList = Array.Empty<String>();
+    private IEnumerable<String> MyWatchList = Array.Empty<String>();
     int counter = 1;
     private bool isLoading = false;
 
@@ -106,7 +106,7 @@
         var newValue = e.Value.ToString();
         if (!string.IsNullOrEmpty(newValue))
         {
-            if (!WatchList.Contains(newValue))
+            if (!MyWatchList.Contains(newValue))
             {
                 AddStock(newValue);
             }
@@ -121,7 +121,7 @@
     {
         if (!string.IsNullOrWhiteSpace(stock) && !StockExists(stock))
         {
-            WatchList = WatchList.Append(stock).ToList();
+            MyWatchList = MyWatchList.Append(stock).ToList();
             ShowToast("Added", stock, ToastIntent.Success);
             loadingMessage = $"Added {stock}.";
         }
@@ -136,7 +136,7 @@
     {
         if (!string.IsNullOrWhiteSpace(stock))
         {
-            WatchList = WatchList.Where(t => t != stock).ToList();
+            MyWatchList = MyWatchList.Where(t => t != stock).ToList();
             ShowToast("Removed", stock, ToastIntent.Success);
             loadingMessage = $"Removed {stock}.";
         }
@@ -149,7 +149,7 @@
 
     private bool StockExists(string stock)
     {
-        var exists = WatchList.Contains(stock);
+        var exists = MyWatchList.Contains(stock);
 
         if (exists)
         {
@@ -165,7 +165,7 @@
             {
                 Id = userId,
                 UserId = userId, 
-                WatchList = new List<string>(WatchList)
+                WatchList = new List<string>(MyWatchList)
             };
         string actionTaken;
 
@@ -204,9 +204,9 @@
             {
                 watch = await WatchListService.GetWatchlist(user.Identity.Name);
                 
-                if ((WatchList != null) || (!WatchList.Any()))
+                if ((MyWatchList != null) || (!MyWatchList.Any()))
                 {
-                    WatchList = watch.WatchList;
+                    MyWatchList = watch.WatchList;
                     watchListFound = true;
                 }
                 loadingMessage = null; 
