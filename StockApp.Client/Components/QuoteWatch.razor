@@ -7,11 +7,18 @@
 @inject IQuoteService quoteService
 @attribute [Authorize]
 
-@if (loadFailed)
+@if (quoteData == null || !quoteData.Any())
+{
+    <h4>Loading ...</h4>
+    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+        <FluentProgress></FluentProgress>
+    </div>
+}
+else if (loadFailed)
 {
     <p><span style="color: red;">@errorMessage</span></p>
 }
-else if (quoteData != null)
+else
 {
     <h3>Investors Watch</h3>
 
@@ -30,13 +37,6 @@ else if (quoteData != null)
             }
         }
     </FluentHorizontalScroll>
-}
-else
-{
-    <h4>Loading ...</h4>
-    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-        <FluentProgress></FluentProgress>
-    </div>
 }
 
 @code {
@@ -60,17 +60,22 @@ else
     {
         try
         {
-            var apiResponse = await quoteService.GetQuotesData(Symbol);
-            // if (apiResponse.Data is not null)
-            // {
-                quoteData = apiResponse.Data.QuoteResponse.Result;
-                loadFailed = false;
-            // }
+            quoteData = await LoadData(Symbol);
+            loadFailed = false;
         }
         catch (Exception ex)
         {
             loadFailed = true;
             errorMessage = $"Error: {ex.Message}";
         }
+    }
+
+    private async Task<List<Result>> LoadData(string[] symbol)
+    {
+        // Simulate a delay to test the loading animation
+        await Task.Delay(2000); // 2 seconds delay
+        var apiResponse = await quoteService.GetQuotesData(Symbol);
+        quoteData = apiResponse.Data.QuoteResponse.Result;
+        return quoteData;
     }
 }

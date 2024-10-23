@@ -12,7 +12,14 @@
 @attribute [Authorize]
 
 <div class="responsive-grid">
-    @if (quoteData is not null)
+    @if ((quoteData == null || !quoteData.Any()))
+    {
+        <h4>Loading ...</h4>
+        <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+            <FluentProgress></FluentProgress>
+        </div>
+    }
+    else
     {
         @foreach (var quote in quoteData)
         {
@@ -25,7 +32,7 @@
                 <span class="value @(quote.RegularMarketChange >= 0 ? "text-success":"text-danger")">@quote.RegularMarketChange.ToString("F2") (@quote.RegularMarketChangePercent.ToString("F2")%)</span>
             </div>
         }
-    }   
+    }
 </div>
 
 @code {
@@ -35,6 +42,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await Task.Delay(1500); // 1.5 seconds delay
         var stockData = await quoteService.GetQuotesData(Symbol);
         if (stockData.Data is not null)
         {

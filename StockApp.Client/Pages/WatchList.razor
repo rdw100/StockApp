@@ -1,4 +1,4 @@
-﻿@page "/mywatchlist"
+﻿@page "/watchlist"
 @using System.Collections.Generic
 @using Newtonsoft.Json
 @using StockApp.Client.Interfaces
@@ -39,19 +39,29 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var stock in WatchList)
+                @if ((WatchList == null || !WatchList.Any()))
                 {
-                    <tr>
-                        <td>@stock</td>
-                        <td>
-                            <FluentButton Appearance="@Appearance.Neutral"
-                                          OnClick="() => RemoveStock(stock)"
-                                          IconStart="@(new Icons.Regular.Size20.SubtractCircle())"
-                                          Loading="@isLoading">
-                                Remove
-                            </FluentButton>
-                        </td>
-                    </tr>
+                    <h4>Loading ...</h4>
+                    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
+                        <FluentProgress></FluentProgress>
+                    </div>
+                }
+                else
+                {
+                    @foreach (var stock in WatchList)
+                    {
+                        <tr>
+                            <td>@stock</td>
+                            <td>
+                                <FluentButton Appearance="@Appearance.Neutral"
+                                              OnClick="() => RemoveStock(stock)"
+                                              IconStart="@(new Icons.Regular.Size20.SubtractCircle())"
+                                              Loading="@isLoading">
+                                    Remove
+                                </FluentButton>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
@@ -182,6 +192,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        // Simulate a delay to test the loading animation
+        await Task.Delay(1000); // 1 seconds delay
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         userId = user.Identity.Name;

@@ -6,7 +6,7 @@
 
 <AuthorizeView>
     <Authorized>
-        <FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 4px; ">
+        <FluentGrid Spacing="@Spacing" AdaptiveRendering="true" Justify="@Justification" Style="padding: 2px; ">
             <FluentGridItem xs="12">
                 <FluentCard height="100">
                     <div class="card">
@@ -21,8 +21,7 @@
             </FluentGridItem>
             <FluentGridItem xs="6" AreaRestricted="false">
                 <FluentCard>
-                    <MyWatchList/>
-                    @* <StockPortfolio /> *@
+                    <WatchList/>
                 </FluentCard>
             </FluentGridItem>
             <FluentGridItem xs="6">
@@ -63,7 +62,6 @@
                     </FluentButton>
                 </p>
             </div>
-
         </FluentCard>
     </NotAuthorized>
 </AuthorizeView>
