@@ -34,11 +34,7 @@ namespace StockApp.Isolated.Api
 
             if (user.Identity == null || !user.Identity.IsAuthenticated)
             {
-                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
-                {
-                    StatusCode = StatusCodes.Status401Unauthorized
-                };
-                return customResponse;
+                return ResponseHelper.CreateUnauthorizedResponse();
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -57,7 +53,6 @@ namespace StockApp.Isolated.Api
                 _logger.LogError($"Cosmos DB error: {ex.Message}");
                 return new StatusCodeResult((int)ex.StatusCode);
             }
-
         }
 
         [Function("GetWatchlist")]
@@ -66,16 +61,12 @@ namespace StockApp.Isolated.Api
         string userId)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
-            
+
             var user = StaticWebAppsApiAuth.Parse(req);
 
             if (user.Identity == null || !user.Identity.IsAuthenticated)
             {
-                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
-                {
-                    StatusCode = StatusCodes.Status401Unauthorized
-                };
-                return customResponse;
+                return ResponseHelper.CreateUnauthorizedResponse();
             }
 
             try
@@ -102,11 +93,7 @@ namespace StockApp.Isolated.Api
 
             if (user.Identity == null || !user.Identity.IsAuthenticated)
             {
-                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
-                {
-                    StatusCode = StatusCodes.Status401Unauthorized
-                };
-                return customResponse;
+                return ResponseHelper.CreateUnauthorizedResponse();
             }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
@@ -128,6 +115,18 @@ namespace StockApp.Isolated.Api
                 _logger.LogError($"Error updating watchlist for user {userId}: {ex.Message}");
                 return new StatusCodeResult(500);
             }
+        }
+    }
+
+    public static class ResponseHelper
+    {
+        public static IActionResult CreateUnauthorizedResponse()
+        {
+            var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
+            {
+                StatusCode = StatusCodes.Status401Unauthorized
+            };
+            return customResponse;
         }
     }
 }

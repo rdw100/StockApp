@@ -40,6 +40,5 @@ namespace Swa.Auth.Standard.Api
 
             return AuthenticationHelper.GetClaimsPrincipalFromClientPrincipal(clientPrincipal);
         }
-
     }
 }
