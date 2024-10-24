@@ -1,4 +1,5 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Functions.Worker.Http;
 using Swa.Auth.Standard.Models;
 using Swa.Auth.Standard.Shared;
 using System.Security.Claims;
@@ -25,5 +26,20 @@ namespace Swa.Auth.Standard.Api
 
             return AuthenticationHelper.GetClaimsPrincipalFromClientPrincipal(clientPrincipal);
         }
+
+        public static ClaimsPrincipal Parse(HttpRequest req)
+        {
+            var clientPrincipal = new ClientPrincipal();
+
+            if (req.Headers.TryGetValue(ClientPrincipalHeader, out var header))
+            {
+                var decoded = Convert.FromBase64String(header.FirstOrDefault());
+                var json = Encoding.UTF8.GetString(decoded);
+                clientPrincipal = JsonSerializer.Deserialize<ClientPrincipal>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            }
+
+            return AuthenticationHelper.GetClaimsPrincipalFromClientPrincipal(clientPrincipal);
+        }
+
     }
 }

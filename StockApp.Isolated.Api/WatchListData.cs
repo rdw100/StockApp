@@ -5,7 +5,7 @@ using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using StockApp.Shared.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Swa.Auth.Standard.Api;
 
 namespace StockApp.Isolated.Api
 {
@@ -29,6 +29,17 @@ namespace StockApp.Isolated.Api
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
+
+            var user = StaticWebAppsApiAuth.Parse(req);
+
+            if (user.Identity == null || !user.Identity.IsAuthenticated)
+            {
+                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+                return customResponse;
+            }
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             Watch watch = JsonConvert.DeserializeObject<Watch>(requestBody);
@@ -55,6 +66,17 @@ namespace StockApp.Isolated.Api
         string userId)
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
+            
+            var user = StaticWebAppsApiAuth.Parse(req);
+
+            if (user.Identity == null || !user.Identity.IsAuthenticated)
+            {
+                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+                return customResponse;
+            }
 
             try
             {
@@ -76,6 +98,17 @@ namespace StockApp.Isolated.Api
         {
             _logger.LogInformation("C# HTTP trigger function processed a request.");
 
+            var user = StaticWebAppsApiAuth.Parse(req);
+
+            if (user.Identity == null || !user.Identity.IsAuthenticated)
+            {
+                var customResponse = new ObjectResult(new { message = "Unauthorized access. Please check your credentials." })
+                {
+                    StatusCode = StatusCodes.Status401Unauthorized
+                };
+                return customResponse;
+            }
+
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             var updatedWatchlist = JsonConvert.DeserializeObject<Watch>(requestBody);
             updatedWatchlist.Id = userId;
@@ -94,7 +127,6 @@ namespace StockApp.Isolated.Api
             {
                 _logger.LogError($"Error updating watchlist for user {userId}: {ex.Message}");
                 return new StatusCodeResult(500);
-
             }
         }
     }
