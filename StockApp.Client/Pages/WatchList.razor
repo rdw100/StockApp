@@ -28,7 +28,7 @@
                 OnClick="@(() => Save())"
                 IconStart="@(new Icons.Regular.Size20.SaveArrowRight())"
                 Loading="@isLoading">
-                Save Watchlist 5
+                Save Watchlist 7
             </FluentButton>
             <FluentTooltip Anchor="saveWatchlist" HideTooltipOnCursorLeave="true" Position=TooltipPosition.Bottom>
                 Save your watchlist to view stock data.
@@ -179,7 +179,14 @@
             actionTaken = "Saved";
         }
 
-        quotes = await GetStocks(MyWatchList.ToArray());
+        if (MyWatchList.Count() > 0)//((MyWatchList != null) || (!MyWatchList.Any()))
+    {
+            quotes = await GetStocks(MyWatchList.ToArray());
+        }
+        else
+        {
+            quotes = Enumerable.Empty<Result>().AsQueryable();
+        }
 
         loadingMessage = $"{actionTaken} Watchlist.";
 

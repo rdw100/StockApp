@@ -20,7 +20,7 @@ namespace StockApp.Client.Services
         /// </remarks>
         List<string> IQuoteService.Symbols => new()
         {
-            "AAPL", "AMZN", "CDW", "FB", "GOOG", "MSFT", "NFLX", "NVDA", "PAYX", "TSLA",
+            "AAPL", "AMZN", "CDW", "META", "GOOG", "MSFT", "NFLX", "NVDA", "PAYX", "TSLA",
         };
 
         /// <summary>
