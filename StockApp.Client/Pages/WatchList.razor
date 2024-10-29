@@ -4,7 +4,7 @@
 @using StockApp.Client.Interfaces
 @using StockApp.Shared.Models
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
+@inject NavigationManager navigationManager
 @inject IToastService ToastService
 @inject IWatchlistService WatchListService
 @inject IQuoteService quoteService
@@ -12,74 +12,61 @@
 <AuthorizeView>
     <Authorized Context="authContext">
         <h3>Search</h3>
-
-        <FluentAutocomplete TOption="String"
-                            AutoComplete="off"
-                            Autofocus="true"
-                            Label="Select a Symbol:"
-                            Placeholder="Select stocks"
-                            OnOptionsSearch="@OnSearchAsync"
-                            MaximumSelectedOptions="3"
-                            OptionText="@(item => item)"
-                            @bind-SelectedOptions="@MyWatchList" 
-                            OnChange="OnStockChange"
-                            width="100%" />
-
-        <p>
-            <b>Selected</b>: @(String.Join(" - ", MyWatchList.Select(i => i)))
-        </p>
+        <h6>Select a Symbol:</h6>
+        <FluentStack HorizontalAlignment="@HorizontalAlignment.Start" VerticalAlignment="@VerticalAlignment.Center">
+            <FluentAutocomplete TOption="String"
+                AutoComplete="off"
+                Autofocus="true"
+                Placeholder="Select stocks"
+                OnOptionsSearch="@OnSearchAsync"
+                MaximumSelectedOptions="3"
+                OptionText="@(item => item)"
+                @bind-SelectedOptions="@MyWatchList"                            
+                @onchange="OnStockChange"
+                    Width="250px" />
+            <FluentButton Id="saveWatchlist" Appearance="@Appearance.Accent"
+                OnClick="@(() => Save())"
+                IconStart="@(new Icons.Regular.Size20.SaveArrowRight())"
+                Loading="@isLoading">
+                Save Watchlist 5
+            </FluentButton>
+            <FluentTooltip Anchor="saveWatchlist" HideTooltipOnCursorLeave="true" Position=TooltipPosition.Bottom>
+                Save your watchlist to view stock data.
+            </FluentTooltip>
+        </FluentStack>
 
         <h3>Watchlist</h3>
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Symbol</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @if ((MyWatchList == null || !MyWatchList.Any()))
-                {
-                    <h4>Loading ...</h4>
-                    <div style="width: 100%; display: grid; grid-gap: 12px; grid-auto-flow: column;">
-                        <FluentProgress></FluentProgress>
-                    </div>
-                }
-                else
-                {
-                    @foreach (var stock in MyWatchList)
-                    {
-                        <tr>
-                            <td>@stock</td>
-                            <td>
-                                <FluentButton Appearance="@Appearance.Neutral"
-                                              OnClick="() => RemoveStock(stock)"
-                                              IconStart="@(new Icons.Regular.Size20.SubtractCircle())"
-                                              Loading="@isLoading">
-                                    Remove
-                                </FluentButton>
-                            </td>
-                        </tr>
-                    }
-                }
-            </tbody>
-        </table>
-
-        <p>
-            <FluentButton Appearance="@Appearance.Accent"
-                          OnClick="@SaveWatchList"
-                          IconStart="@(new Icons.Regular.Size20.Save())"
-                          Loading="@isLoading">
-                Save Watchlist
-            </FluentButton>
-        </p>
-
-        @if (loadingMessage != null)
-        {
-            <p>@loadingMessage</p>
-        }
-
+        <div style="display: table; table-layout: fixed; width: 100%;">
+            <div style="overflow-x: auto;">
+                <FluentDataGrid @ref="myStockGrid" Style="min-width: max-content;" Items="@quotes" Loading="@isLoading">
+                    <ChildContent>
+                        <PropertyColumn Title="Symbol" Property="@(q => q.Symbol)" />
+                        <PropertyColumn Title="Price" Property="@(q => q.RegularMarketPrice)" Format="C" />
+                        <PropertyColumn Title="Change" Property="@(q => (q.RegularMarketChange) /100 )" Format="#0.00%" />
+                        <TemplateColumn>
+                            <FluentButton Appearance="Appearance.Neutral" IconStart="@(new Icons.Regular.Size20.Glasses())"
+                                          OnClick="@(() => ShowStock(context.Symbol))" />
+                        </TemplateColumn>
+                    </ChildContent>
+                    <LoadingContent>
+                        <h6>Loading ...</h6>
+                        <FluentProgress Style="min-width: max-content;"></FluentProgress>
+                    </LoadingContent>
+                </FluentDataGrid>
+            </div>
+        </div>
+        <FluentStack HorizontalAlignment="@HorizontalAlignment.End"
+                     VerticalAlignment="@VerticalAlignment.Center">
+            @if (loadingMessage != null)
+            {
+                @loadingMessage
+            }
+            @if (errorMessage != null)
+            {
+                <span style="color: red;">@errorMessage</span>
+            }
+        </FluentStack>
     </Authorized>
     <NotAuthorized>
         <p>Please log in to manage your watchlist.</p>
@@ -91,9 +78,11 @@
     private string userId;
     private bool watchListFound;
     private string loadingMessage;
+    private string errorMessage;
     private IEnumerable<String> MyWatchList = Array.Empty<String>();
     int counter = 1;
     private bool isLoading = false;
+    FluentDataGrid<Result> myStockGrid;
 
     private async Task OnSearchAsync(OptionsSearchEventArgs<String> e)
     {
@@ -104,6 +93,7 @@
     private void OnStockChange(ChangeEventArgs e)
     {
         var newValue = e.Value.ToString();
+
         if (!string.IsNullOrEmpty(newValue))
         {
             if (!MyWatchList.Contains(newValue))
@@ -113,8 +103,13 @@
             else
             {
                 RemoveStock(newValue);
-            }            
+            }
         }
+    }
+
+    private void ShowStock(string stock)
+    {
+        navigationManager.NavigateTo($"/candlestick?symbol={stock}");
     }
 
     private async Task AddStock(string stock)
@@ -122,6 +117,7 @@
         if (!string.IsNullOrWhiteSpace(stock) && !StockExists(stock))
         {
             MyWatchList = MyWatchList.Append(stock).ToList();
+
             ShowToast("Added", stock, ToastIntent.Success);
             loadingMessage = $"Added {stock}.";
         }
@@ -137,6 +133,8 @@
         if (!string.IsNullOrWhiteSpace(stock))
         {
             MyWatchList = MyWatchList.Where(t => t != stock).ToList();
+            //quotes = quotes.Where(q => q.Symbol != stock);
+
             ShowToast("Removed", stock, ToastIntent.Success);
             loadingMessage = $"Removed {stock}.";
         }
@@ -158,13 +156,13 @@
         return exists;
     }
 
-    private void SaveWatchList()
+    private async Task Save()
     {
         isLoading = true;
         var saveWatch = new Watch
             {
                 Id = userId,
-                UserId = userId, 
+                UserId = userId,
                 WatchList = new List<string>(MyWatchList)
             };
         string actionTaken;
@@ -181,6 +179,8 @@
             actionTaken = "Saved";
         }
 
+        quotes = await GetStocks(MyWatchList.ToArray());
+
         loadingMessage = $"{actionTaken} Watchlist.";
 
         ShowToast("Saved", "Data " + actionTaken, ToastIntent.Success);
@@ -192,6 +192,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        isLoading = true;
         // Simulate a delay to test the loading animation
         await Task.Delay(1000); // 1 seconds delay
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
@@ -203,10 +204,13 @@
             try
             {
                 watch = await WatchListService.GetWatchlist(user.Identity.Name);
-                
+
                 if ((MyWatchList != null) || (!MyWatchList.Any()))
                 {
                     MyWatchList = watch.WatchList;
+
+                    quotes = await GetStocks(MyWatchList.ToArray());
+
                     watchListFound = true;
                 }
                 loadingMessage = null; 
@@ -216,11 +220,21 @@
                 loadingMessage = "No existing watchlist found. You can create a new one.";
             }
         }
+        isLoading = false;
     }
 
     void ShowToast(string action, string symbol, ToastIntent intent)
     {
         var message = $"{action} Stock {symbol} #{counter++}";
         ToastService.ShowToast(intent, message);
+    }
+
+    private IQueryable<Result> quotes;
+
+    private async Task<IQueryable<Result>> GetStocks(string[] symbols)
+    {
+        var quoteResult = await quoteService.GetQuotesData(symbols);
+        IQueryable<Result> queryableQuotes = quoteResult.Data.QuoteResponse.Result.AsQueryable();
+        return queryableQuotes;
     }
 }

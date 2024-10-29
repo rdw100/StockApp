@@ -2,6 +2,7 @@ using BlazorPro.BlazorSize;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components.Components.Tooltip;
 using StockApp.Client;
 using StockApp.Client.Interfaces;
 using StockApp.Client.Services;
@@ -18,6 +19,7 @@ builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<IWatchlistService, WatchlistService>();
 builder.Services.AddSingleton<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<ITooltipService, TooltipService>();
 builder.Services.AddFluentUIComponents();
 
 await builder.Build().RunAsync();
