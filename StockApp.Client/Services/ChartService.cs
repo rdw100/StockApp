@@ -38,7 +38,7 @@ namespace StockApp.Client.Services
             catch (HttpRequestException e)
             {
                 // Handle network-related errors
-                return new ApiResponse<ChartResult>("Network error occurred while fetching stock data.", 503);
+                return new ApiResponse<ChartResult>($"Network error occurred while fetching stock data.: {e.Message}", 503);
             }
             catch (Exception ex)
             {

@@ -60,7 +60,7 @@ namespace StockApp.Client.Services
             catch (HttpRequestException e)
             {
                 // Handle network-related errors
-                return new ApiResponse<QuoteResult>("Network error occurred while fetching stock data.", 503);
+                return new ApiResponse<QuoteResult>($"Network error occurred while fetching stock data:: {e.Message}", 503);
             }
             catch (Exception ex)
             {
@@ -93,7 +93,7 @@ namespace StockApp.Client.Services
             catch (HttpRequestException e)
             {
                 // Handle network-related errors
-                return new ApiResponse<QuoteResult>("Network error occurred while fetching stock data.", 503);
+                return new ApiResponse<QuoteResult>($"Network error occurred while fetching stock data: {e.Message}", 503);
             }
             catch (Exception ex)
             {
