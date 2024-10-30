@@ -43,7 +43,7 @@
                     <ChildContent>
                         <PropertyColumn Title="Symbol" Property="@(q => q.Symbol)" />
                         <PropertyColumn Title="Price" Property="@(q => q.RegularMarketPrice)" Format="C" />
-                        <PropertyColumn Title="Change" Property="@(q => (q.RegularMarketChange) /100 )" Format="#0.00%" Class="hide-xs"/>
+                        <PropertyColumn Title="Change" Property="@(q => (q.RegularMarketChange) /100 )" Format="#0.00%"/>
                         <TemplateColumn>
                             <FluentButton Appearance="Appearance.Neutral" IconStart="@(new Icons.Regular.Size20.Glasses())"
                                           OnClick="@(() => ShowStock(context.Symbol))" />
