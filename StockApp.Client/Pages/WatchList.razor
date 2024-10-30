@@ -112,7 +112,7 @@
         navigationManager.NavigateTo($"/candlestick?symbol={stock}");
     }
 
-    private async Task AddStock(string stock)
+    private void AddStock(string stock)
     {
         if (!string.IsNullOrWhiteSpace(stock) && !StockExists(stock))
         {
@@ -133,7 +133,6 @@
         if (!string.IsNullOrWhiteSpace(stock))
         {
             MyWatchList = MyWatchList.Where(t => t != stock).ToList();
-            //quotes = quotes.Where(q => q.Symbol != stock);
 
             ShowToast("Removed", stock, ToastIntent.Success);
             loadingMessage = $"Removed {stock}.";
@@ -169,17 +168,17 @@
 
         if (watchListFound)
         {
-            WatchListService.UpdateWatchlist(saveWatch);
+            await WatchListService.UpdateWatchlist(saveWatch);
             actionTaken = "Updated";
         }
         else
         {
-            WatchListService.SaveWatchlist(saveWatch);
+            await WatchListService.SaveWatchlist(saveWatch);
             watchListFound = true;
             actionTaken = "Saved";
         }
 
-        if (MyWatchList.Count() > 0)//((MyWatchList != null) || (!MyWatchList.Any()))
+        if (MyWatchList.Count() > 0)
     {
             quotes = await GetStocks(MyWatchList.ToArray());
         }
