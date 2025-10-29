@@ -27,7 +27,7 @@ The architecture emphasizes scalability, security, and maintainability by levera
 
 ## 🧱 Architecture - Design Overview
  
-The architecture is designed to separate concerns across different layers, ensuring a clean and maintainable codebase. The Presentation Layer, built with Blazor WebAssembly, handles user interactions and UI rendering. The Application Layer, powered by Azure Functions, manages business logic and orchestrates use cases. The Domain Layer encapsulates core models and domain logic, while the Infrastructure Layer integrates external services such as third-party APIs and authentication mechanisms. 
+The architecture is designed to separate concerns across different layers, ensuring a clean and maintainable codebase. 
 
 | 🧩 Layer         | 📁 Project Folder(s)                                | 📌 Responsibilities                                      |
 |------------------|-----------------------------------------------------|----------------------------------------------------------|
@@ -38,17 +38,17 @@ The architecture is designed to separate concerns across different layers, ensur
 
 ---
 
-## 📐 Architecture - Physical Design
+## 📐 Architecture - Component Design
 
-This diagram illustrates the physical architecture of the StockApp solution.
+This diagram illustrates the cloud-native component architecture diagram of the StockApp solution.
 
-![Cloud-Native Architecture Diagram](https://github.com/rdw100/StockApp/blob/master/StockApp.Client/wwwroot/img/Copilot_20251028_115749.png?raw=true)
+![Cloud-Native Architecture Diagram](https://github.com/rdw100/StockApp/blob/master/StockApp.Client/wwwroot/img/Copilot_20251029_152025.png?raw=true)
 
 ---
 
-## 🏗️ Architecture - Logical Design
+## 🏗️ Architecture - Logical Flow
 
-This diagram illustrates the logical architecture of the StockApp solution.
+This flowchart illustrates the logical flow architecture of the StockApp solution.
 
 ```mermaid
 ---
@@ -89,7 +89,7 @@ This project uses the following ASWA capabilities.
 
 The StockApp solution leverages a variety of technologies to deliver a robust and scalable web application:
 
-- 🧮 **Languages**: HTML (52.6%), C# (38.2%), CSS (6.2%), JavaScript (3.0%)
+- 🧮 **Languages**: HTML, C#, CSS, JavaScript
 - 🧱 **Frameworks**: .NET 8, Blazor WebAssembly
 - ☁️ **Cloud Services**: Azure Static Web Apps, Azure Functions, Azure Cosmos DB
 - 🛠️ **Dev Tools**: Visual Studio 2022, GitHub Actions
@@ -112,4 +112,3 @@ git clone https://github.com/rdw100/StockApp.git
 swa start ./StockApp.Blazor --api ./StockApp.Api
 ```
 ---
-
