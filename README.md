@@ -1,38 +1,83 @@
-# StockApp
+﻿# 📊 StockApp
 
-StockApp is a .NET project leveraging Azure Static Web Apps.  Azure Static Web Apps is a cloud-based modern web app service that deploys full stack web apps to Azure from a code repository.  StockApp demonstration project was created using Visual Studio 2022, .NET 8, Blazor WebAssembly, Azure Functions (isolated worker) Serverless Backend, Azure Cosmos DB - NoSQL, GitHub authentication, GitHub code repository, SWA CLI development, and Fluent UI Blazor components. 
+**StockApp** is a full-stack .NET solution that demonstrates how to build and deploy scalable, secure, and modern web applications using **Azure Static Web Apps**, **Blazor WebAssembly**, and **Azure Functions (Isolated Worker)**. It integrates GitHub authentication, CI/CD, and Cosmos DB to showcase a clean, layered architecture for cloud-native development.
 
-## Features
+---
 
-This project uses the following technologies.
+## 🚀 Overview
 
-- Visual Studio 2022
-- Azure Static Web Apps
-- Azure Functions
-- Azure Cosmos DB
-- Blazor WebAssembly
-- Fluent UI Blazor components
+This project was built using:
+
+- 🧰 **Visual Studio 2022**
+- 🧠 **.NET 8**
+- 🎨 **Blazor WebAssembly** (Client-side UI)
+- ⚙️ **Azure Functions (Isolated Worker)** (Serverless backend)
+- 🗄️ **Azure Cosmos DB (NoSQL)** (Cloud-native data storage)
+- 🔐 **GitHub Authentication**
+- 🧪 **Azure Static Web Apps CLI (SWA CLI)**
+- 🧱 **Fluent UI Blazor Components**
+
+---
+
+## 🧱 Architecture
+
+| 🧩 Layer         | 📁 Project Folder(s)                                | 📌 Responsibilities                                      |
+|------------------|-----------------------------------------------------|----------------------------------------------------------|
+| 🎨 Presentation  | `StockApp.Client`, `StockApp.Pwa`                   | UI rendering, client interactions, API exposure          |
+| 🧠 Application   | `StockApp.Api`                                      | Business logic, use case orchestration                   |
+| 🧬 Domain        | `StockApp.Shared.Models`, `StockApp.Shared.Enums`   | Core models and domain logic                             |
+| 🔌 Infrastructure| `StockApp.Api.Services`, `Swa.Auth.Standard`        | External APIs, background tasks, authentication          |
+
+---
+
+## 🌐 Azure Static Web Apps Features
 
 This project uses the following ASWA capabilities.
 
-- Free Web Hosting
-- Integrated API w/ Azure Functions
-- GitHub CI/CD
-- Free SSL Certificates
-- Custom Domain
-- Built-in Security w/ Github
-- Azure Static Web Apps CLI (SWA CLI)
+- ✅ Free Web Hosting
+- 🔐 GitHub Authentication
+- 🔄 GitHub CI/CD Integration
+- 🔒 Free SSL Certificates
+- 🌍 Custom Domain Support
+- 🛡️ Built-in Security
+- 🧪 Local Dev with SWA CLI
+- 🔌 Integrated API with Azure Functions
+ 
+---
 
-# Summary of Layers
+## 📦 Tech Stack Summary
 
-| **Layer**         | **Representation in Project**                           | **Responsibilities**                                           |
-|-------------------|---------------------------------------------------------|---------------------------------------------------------------|
-| **Presentation**  | `StockApp.Client`, `StockApp.Pwa`            | UI, client interactions, and API endpoint exposure             |
-| **Application**   | `StockApp.Api`                                      | Business logic, use cases, and application coordination         |
-| **Domain**        | `StockApp.Shared.Models`, `StockApp.Shared.Enums`        | Core business models and domain logic                          |
-| **Infrastructure**| `StockApp.Api.Services`, `Swa.Auth.Standard` | External API calls, background tasks, and infrastructure concerns|
+- 🧮 **Languages**: HTML (52.6%), C# (38.2%), CSS (6.2%), JavaScript (3.0%)
+- 🧱 **Frameworks**: .NET 8, Blazor WebAssembly
+- ☁️ **Cloud Services**: Azure Static Web Apps, Azure Functions, Azure Cosmos DB
+- 🛠️ **Dev Tools**: Visual Studio 2022, GitHub Actions
 
-## Design - Overview
+---
+
+## 🛠️ Getting Started
+
+```bash
+# Clone the repo
+git clone https://github.com/rdw100/StockApp.git
+
+# Install prerequisites
+# - .NET 8 SDK
+# - Azure Static Web Apps CLI
+
+# Run locally
+swa start ./StockApp.Blazor --api ./StockApp.Api
+
+---
+
+## 📐 Architecture - Cloud-Native Architecture
+
+This diagram illustrates the architecture of the StockApp solution, showcasing how various Azure services and components interact to deliver a seamless user experience. The architecture emphasizes scalability, security, and maintainability by leveraging Azure Static Web Apps for hosting, Azure Functions for serverless backend logic, and Azure Cosmos DB for NoSQL data storage. The integration of GitHub authentication ensures secure access, while the use of Blazor WebAssembly enables rich client-side interactions.
+
+![Cloud-Native Architecture Diagram](https://github.com/rdw100/StockApp/blob/master/StockApp.Client/wwwroot/img/stockapp.jpg?raw=true)
+
+---
+
+## 🏗️ Architecture Design - Overview
 ```mermaid
 ---
 title: Integrating a Third-Party API with an Azure Static Web Apps (Blazor WebAssembly app and .NET API)
