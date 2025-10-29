@@ -366,3 +366,4 @@ FodyWeavers.xsd
 /StockApp.Shared/appsettings.json
 /StockApp.Api/appsettings.json
 /StockApp.Api.Services/appsettings.json
+/global.json
